@@ -1,13 +1,20 @@
 type MembershipStatus = 'Active' | 'Inactive' | 'Left'
 export class Participant {
+  id: string
   name: string
   email: string
   status: MembershipStatus
 
-  constructor(name: string, email: string, status: MembershipStatus) {
+  constructor(
+    id: string,
+    name: string,
+    email: string,
+    status: MembershipStatus,
+  ) {
     if (!this.isValidEmail(email)) {
       throw new Error('Invalid email address provided.')
     }
+    this.id = id
     this.name = name
     this.email = email
     this.status = status
