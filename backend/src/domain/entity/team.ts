@@ -1,12 +1,16 @@
+import { Pair } from 'src/domain/entity/pair'
+
 export class Team {
   id: string
   name: string
+  pairs: Pair[]
 
-  constructor(id: string, name: string) {
+  constructor(id: string, name: string, pairs: Pair[]) {
     this.isValidName(name)
 
     this.id = id
     this.name = name
+    this.pairs = pairs
   }
 
   private isValidName(name: string): void {
@@ -21,7 +25,7 @@ export class Team {
     }
 
     if (numValue < 0 || !Number.isInteger(numValue)) {
-      throw new Error('数字は正の整数にしてください')
+      throw new Error('チーム名の数字は正の整数にしてください')
     }
   }
 }
