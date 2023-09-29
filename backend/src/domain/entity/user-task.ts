@@ -25,4 +25,8 @@ export class Task {
     }
     this.status = status
   }
+
+  public isMatchedUserId(userId: string) {
+    return userId === this.participantId
+  }
 }
