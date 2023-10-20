@@ -1,6 +1,6 @@
 type Status = '未着手' | 'レビュー待ち' | '完了'
 
-export class Task {
+export class ParticipantTask {
   readonly id: string
   readonly participantId: string
   readonly taskId: string
@@ -26,7 +26,7 @@ export class Task {
     this.status = status
   }
 
-  public isMatchedUserId(userId: string) {
-    return userId === this.participantId
+  public isMatchedParticipantId(participantId: string) {
+    return participantId === this.participantId
   }
 }
