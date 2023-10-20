@@ -1,9 +1,9 @@
 import { Participant } from './participant'
 
 export class Pair {
-  id: string
-  name: string
-  participants: Participant[]
+  readonly id: string
+  readonly name: string
+  readonly participants: Participant[]
 
   constructor(args: { id: string; name: string; participants: Participant[] }) {
     const { id, name, participants } = args

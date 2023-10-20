@@ -1,9 +1,9 @@
 import { Pair } from 'src/domain/entity/pair'
 
 export class Team {
-  id: string
-  name: string
-  pairs: Pair[]
+  readonly id: string
+  readonly name: string
+  readonly pairs: Pair[]
 
   constructor(id: string, name: string, pairs: Pair[]) {
     this.isValidName(name)

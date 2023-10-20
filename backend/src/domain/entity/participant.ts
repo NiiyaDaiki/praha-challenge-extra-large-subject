@@ -1,9 +1,9 @@
 type MembershipStatus = 'Active' | 'Inactive' | 'Left'
 export class Participant {
-  id: string
-  name: string
-  email: string
-  status: MembershipStatus
+  readonly id: string
+  readonly name: string
+  readonly email: string
+  readonly status: MembershipStatus
 
   constructor(
     id: string,

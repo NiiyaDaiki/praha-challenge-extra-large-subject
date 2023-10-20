@@ -1,9 +1,9 @@
 type Status = '未着手' | 'レビュー待ち' | '完了'
 
 export class Task {
-  id: string
-  participantId: string
-  taskId: string
+  readonly id: string
+  readonly participantId: string
+  readonly taskId: string
   status: Status
 
   public constructor(args: {

@@ -6,12 +6,12 @@ type Genre =
   | 'Frontend'
   | 'TeamDev'
   | 'MVP'
-
 export class Task {
-  id: string
-  title: string
-  genre: Genre
-  description: string
+  readonly id: string
+  readonly title: string
+  readonly genre: Genre
+  readonly description: string
+
   public constructor(args: {
     id: string
     title: string
