@@ -1,16 +1,17 @@
-type MembershipStatus = 'Active' | 'Inactive' | 'Left'
+export type MembershipStatus = 'ACTIVE' | 'INACTIVE' | 'LEFT'
 export class Participant {
   readonly id: string
   readonly name: string
   readonly email: string
   readonly status: MembershipStatus
 
-  constructor(
+  constructor(props: {
     id: string,
     name: string,
     email: string,
-    status: MembershipStatus,
-  ) {
+    status?: MembershipStatus,
+  }) {
+    const { id, name, email, status = 'ACTIVE' } = props
     if (!this.isValidEmail(email)) {
       throw new Error('Invalid email address provided.')
     }
@@ -26,6 +27,6 @@ export class Participant {
   }
 
   public isActive() {
-    return this.status === 'Active'
+    return this.status === 'ACTIVE'
   }
 }

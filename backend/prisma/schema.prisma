@@ -4,8 +4,20 @@ datasource db {
 }
 
 generator client {
-  previewFeatures = ["nativeTypes"]
   provider        = "prisma-client-js"
+}
+
+model Participant {
+  id         String       @id
+  name       String
+  email      String       @unique
+  status     Status       @default(ACTIVE)
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  LEFT
 }
 
 model SomeData {
