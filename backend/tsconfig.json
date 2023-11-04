@@ -8,11 +8,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES2022",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "paths": {"@testUtil/*": ["testUtil/*"]}
+    "paths": { "@testUtil/*": ["testUtil/*"] }
   }
 }
