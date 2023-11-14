@@ -1,9 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
+import { AddParticipantUseCase } from 'src/app/sample/add-participant-usecase';
 import { GetParticipantsUseCase } from 'src/app/sample/get-participants-usecase';
+import { AddParticipantRequest } from 'src/controller/participants/request/add-participant-request';
 import { GetParticipantsResponse } from 'src/controller/participants/response/get-participants-response';
 import { ParticipantsQS } from 'src/infra/db/query-service/sample/participants-qs';
+import { ParticipantRepository } from 'src/infra/db/repository/participant-repository';
 
 @Controller({
   path: '/participants'
@@ -21,6 +24,12 @@ export class ParticipantsController {
     return response
   }
 
+  @Post()
+  async addParticipant(@Body() postUserDto: AddParticipantRequest): Promise<void> {
+    const prisma = new PrismaClient()
+    const repo = new ParticipantRepository(prisma)
+    const usecase = new AddParticipantUseCase(repo)
+    await usecase.do(postUserDto)
+  }
 }
-
 

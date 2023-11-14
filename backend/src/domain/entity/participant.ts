@@ -37,4 +37,13 @@ export class Participant {
   public isActive() {
     return this.status === 'ACTIVE'
   }
+
+  public getAllProperties() {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      status: this.status,
+    }
+  }
 }
