@@ -5,7 +5,7 @@ export class Participant {
   readonly email: string
   readonly status: MembershipStatus
 
-  constructor(props: {
+  private constructor(props: {
     id: string,
     name: string,
     email: string,
@@ -19,6 +19,14 @@ export class Participant {
     this.name = name
     this.email = email
     this.status = status
+  }
+
+  static create(props: { id: string; name: string; email: string }) {
+    return new Participant({ ...props, status: 'ACTIVE' });
+  }
+
+  static reconstruct(props: { id: string; name: string; email: string; status: MembershipStatus }): Participant {
+    return new Participant({ ...props });
   }
 
   private isValidEmail(email: string): boolean {
