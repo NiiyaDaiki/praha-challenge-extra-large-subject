@@ -12,12 +12,50 @@ model Participant {
   name       String
   email      String       @unique
   status     Status       @default(ACTIVE)
+
+  participantTask ParticipantTask[]
 }
 
 enum Status {
   ACTIVE
   INACTIVE
   LEFT
+}
+
+model Task {
+  id          String     @id
+  genre      Genre
+  title       String
+  description String
+
+  participantTask    ParticipantTask[]
+}
+
+enum Genre {
+  BASIS
+  TEST
+  DATABASE
+  ARCHITECTURE
+  FRONTEND
+  TEAM_DEV
+  MVP
+}
+
+model ParticipantTask {
+  id     String     @id
+  progress Progress @default(NOT_STARTED)
+  participantId String
+  taskId String
+
+  participant Participant @relation(fields: [participantId], references: [id])
+  task   Task       @relation(fields: [taskId], references: [id])
+}
+
+enum Progress {
+  NOT_STARTED
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
 }
 
 model SomeData {
