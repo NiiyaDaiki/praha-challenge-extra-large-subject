@@ -21,21 +21,4 @@ export class ParticipantTaskRepository implements IParticipantTaskRepository {
 
     return ParticipantTask.reconstruct(savedParticipantTaskModel);
   }
-
-  // public async save(participantEntity: Participant): Promise<Participant> {
-  //   const { id, name, email, status } = participantEntity.getAllProperties()
-
-  //   const savedParticipantDataModel = await this.prismaClient.participant.create({
-  //     data: {
-  //       id,
-  //       name,
-  //       email,
-  //       status
-  //     },
-  //   })
-  //   const savedSomeDataEntity = Participant.create({
-  //     ...savedParticipantDataModel,
-  //   })
-  //   return savedSomeDataEntity
-  // }
 }
