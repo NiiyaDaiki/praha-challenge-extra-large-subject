@@ -1,4 +1,4 @@
-import { Progress } from "src/domain/entity/task/progress"
+import { Progress } from "../../domain/entity/task/progress"
 
 export class ParticipantTask {
   readonly id: string

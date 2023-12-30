@@ -1,7 +1,7 @@
-import { Participant } from 'src/domain/entity/participant';
+import { Participant } from '../../domain/entity/participant';
 import { IParticipantRepository } from './repository-interface/participant-repository-interface'
-import { createRandomIdString } from 'src/util/random';
-import { ITaskQS } from 'src/app/sample/query-service-interface/tasks-qs';
+import { createRandomIdString } from '../../util/random';
+import { ITaskQS } from './query-service-interface/tasks-qs';
 
 export class AddParticipantUseCase {
   public constructor(

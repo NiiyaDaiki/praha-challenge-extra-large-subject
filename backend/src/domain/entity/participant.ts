@@ -1,6 +1,6 @@
-import { ParticipantTask } from "src/domain/entity/participant-task"
-import { Task } from "src/domain/entity/task/task"
-import { createRandomIdString } from "src/util/random"
+import { ParticipantTask } from "../../domain/entity/participant-task"
+import { Task } from "../../domain/entity/task/task"
+import { createRandomIdString } from "../../util/random"
 
 export type MembershipStatus = 'ACTIVE' | 'INACTIVE' | 'LEFT'
 export class Participant {

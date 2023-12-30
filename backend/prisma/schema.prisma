@@ -13,7 +13,7 @@ model Participant {
   email      String       @unique
   status     Status       @default(ACTIVE)
 
-  participantTask ParticipantTask[]
+  participantTasks ParticipantTask[]
 }
 
 enum Status {
@@ -28,7 +28,7 @@ model Task {
   title       String
   description String
 
-  participantTask    ParticipantTask[]
+  participantTasks    ParticipantTask[]
 }
 
 enum Genre {
