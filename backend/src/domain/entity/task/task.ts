@@ -1,10 +1,10 @@
-type Genre =
-  | 'Basis'
-  | 'Test'
-  | 'Database'
-  | 'Architecture'
-  | 'Frontend'
-  | 'TeamDev'
+export type Genre =
+  | 'BASIS'
+  | 'TEST'
+  | 'DATABASE'
+  | 'ARCHITECTURE'
+  | 'FRONTEND'
+  | 'TEAM_DEV'
   | 'MVP'
 export class Task {
   readonly id: string
