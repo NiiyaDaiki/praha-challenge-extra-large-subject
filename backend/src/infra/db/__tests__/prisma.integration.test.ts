@@ -1,4 +1,4 @@
-import { prisma } from '@testUtil/prisma'
+import { prisma } from '../../../../testUtil/prisma'
 
 describe('prism全般に関するテスト', () => {
   beforeAll(async () => {

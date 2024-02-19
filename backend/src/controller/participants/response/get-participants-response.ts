@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { ParticipantDTO } from 'src/app/sample/query-service-interface/participants-qs'
-import { MembershipStatus } from 'src/domain/entity/participant'
+import { ParticipantDTO } from '../../../app/sample/query-service-interface/participants-qs'
+import { MembershipStatus } from '../../../domain/entity/participant'
 
 export class GetParticipantsResponse {
   @ApiProperty({ type: () => [Participant] })

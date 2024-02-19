@@ -1,5 +1,5 @@
-import { SomeData } from 'src/domain/some-data/some-data'
-import { createRandomIdString } from 'src/util/random'
+import { SomeData } from '../../domain/some-data/some-data'
+import { createRandomIdString } from '../../util/random'
 import { ISomeDataRepository } from '../../domain/some-data/some-data-repository'
 
 export class PostSomeDataUseCase {

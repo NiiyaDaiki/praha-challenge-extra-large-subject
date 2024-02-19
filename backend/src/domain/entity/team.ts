@@ -1,4 +1,4 @@
-import { Pair } from 'src/domain/entity/pair'
+import { Pair } from '../../domain/entity/pair'
 
 export class Team {
   readonly id: string

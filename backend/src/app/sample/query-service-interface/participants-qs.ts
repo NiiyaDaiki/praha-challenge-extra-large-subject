@@ -1,4 +1,4 @@
-import { MembershipStatus } from "src/domain/entity/participant";
+import { MembershipStatus } from "../../../domain/entity/participant";
 
 export class ParticipantDTO {
   public readonly id: string

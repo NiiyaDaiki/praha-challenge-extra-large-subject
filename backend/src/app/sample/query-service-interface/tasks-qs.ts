@@ -1,4 +1,4 @@
-import { Genre } from "src/domain/entity/task/task";
+import { Genre } from "../../../domain/entity/task/task";
 
 export class TaskDTO {
   public readonly id: string
