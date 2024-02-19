@@ -1,6 +1,6 @@
 import * as faker from 'faker'
-import { SomeData } from 'src/domain/some-data/some-data'
-import { prisma } from '@testUtil/prisma'
+import { SomeData } from '../src/domain/some-data/some-data'
+import { prisma } from '../testUtil/prisma'
 
 export const seedSomeData = async (params: {
   id?: string

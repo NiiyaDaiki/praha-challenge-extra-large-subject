@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import {
   SomeDataDTO,
   ISomeDataQS,
-} from 'src/app/sample/query-service-interface/some-data-qs'
+} from '../../../../app/sample/query-service-interface/some-data-qs'
 
 export class SomeDataQS implements ISomeDataQS {
   private prismaClient: PrismaClient

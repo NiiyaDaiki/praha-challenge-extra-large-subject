@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import { IParticipantsQS, ParticipantDTO } from 'src/app/sample/query-service-interface/participants-qs'
+import { IParticipantsQS, ParticipantDTO } from '../../../../app/sample/query-service-interface/participants-qs'
 
 export class ParticipantsQS implements IParticipantsQS {
   private prismaClient: PrismaClient

@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { IParticipantTaskRepository } from 'src/app/sample/repository-interface/participant-task-repository-interface'
-import { ParticipantTask } from 'src/domain/entity/participant-task'
+import { IParticipantTaskRepository } from '../../../app/sample/repository-interface/participant-task-repository-interface'
+import { ParticipantTask } from '../../../domain/entity/participant-task'
 
 export class ParticipantTaskRepository implements IParticipantTaskRepository {
   private prismaClient: PrismaClient
