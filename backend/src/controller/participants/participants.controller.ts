@@ -1,14 +1,13 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
-import { AddParticipantUseCase } from 'src/app/sample/add-participant-usecase';
-import { GetParticipantsUseCase } from 'src/app/sample/get-participants-usecase';
-import { AddParticipantRequest } from 'src/controller/participants/request/add-participant-request';
-import { GetParticipantsResponse } from 'src/controller/participants/response/get-participants-response';
-import { ParticipantsQS } from 'src/infra/db/query-service/sample/participants-qs';
-import { TaskQS } from 'src/infra/db/query-service/sample/tasks-qs';
-import { ParticipantRepository } from 'src/infra/db/repository/participant-repository';
-import { ParticipantTaskRepository } from 'src/infra/db/repository/participant-task-repository';
+import { AddParticipantUseCase } from '../../app/sample/add-participant-usecase';
+import { GetParticipantsUseCase } from '../../app/sample/get-participants-usecase';
+import { AddParticipantRequest } from '../../controller/participants/request/add-participant-request';
+import { GetParticipantsResponse } from '../../controller/participants/response/get-participants-response';
+import { ParticipantsQS } from '../../infra/db/query-service/sample/participants-qs';
+import { TaskQS } from '../../infra/db/query-service/sample/tasks-qs';
+import { ParticipantRepository } from '../../infra/db/repository/participant-repository';
 
 @Controller({
   path: '/participants'
@@ -31,8 +30,7 @@ export class ParticipantsController {
     const prisma = new PrismaClient()
     const participantRepo = new ParticipantRepository(prisma)
     const taskQS = new TaskQS(prisma)
-    const participantTaskRepo = new ParticipantTaskRepository(prisma)
-    const usecase = new AddParticipantUseCase(participantRepo, taskQS, participantTaskRepo)
+    const usecase = new AddParticipantUseCase(participantRepo, taskQS)
     await usecase.do(postUserDto)
   }
 }

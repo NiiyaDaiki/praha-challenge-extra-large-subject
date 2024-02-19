@@ -1,5 +1,5 @@
-import { Participant } from 'src/domain/entity/participant';
+import { Participant } from '../../../domain/entity/participant';
 
 export interface IParticipantRepository {
-  save(user: Participant): Promise<Participant>;
+  save(user: Participant): Promise<void>;
 }

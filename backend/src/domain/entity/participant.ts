@@ -61,6 +61,7 @@ export class Participant {
       name: this.name,
       email: this.email,
       status: this.status,
+      tasks: this.participantTasks
     }
   }
 }

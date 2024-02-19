@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import { IParticipantRepository } from 'src/app/sample/repository-interface/participant-repository-interface'
-import { Participant } from 'src/domain/entity/participant'
+import { IParticipantRepository } from '../../../app/sample/repository-interface/participant-repository-interface'
+import { Participant } from '../../../domain/entity/participant'
 
 export class ParticipantRepository implements IParticipantRepository {
   private prismaClient: PrismaClient
@@ -8,20 +8,31 @@ export class ParticipantRepository implements IParticipantRepository {
     this.prismaClient = prismaClient
   }
 
-  public async save(participantEntity: Participant): Promise<Participant> {
-    const { id, name, email, status } = participantEntity.getAllProperties()
+  public async save(participantEntity: Participant): Promise<void> {
+    const { id, name, email, status, tasks } = participantEntity.getAllProperties()
 
-    const savedParticipantDataModel = await this.prismaClient.participant.create({
+    await this.prismaClient.participant.create({
       data: {
         id,
         name,
         email,
-        status
+        status,
+        participantTasks: {
+          create: tasks.map(task => ({ ...task }))
+        }
       },
     })
-    const savedSomeDataEntity = Participant.create({
-      ...savedParticipantDataModel,
-    })
-    return savedSomeDataEntity
+
+    // todo:保存操作の結果を、エンティティに変換して返すにはどうしたらいい？ 使わなければ返す必要ないか。
+    // const savedSomeDataEntity = Participant.reconstruct({
+    //   ...savedParticipantDataModel,
+    //   participantTasks: savedParticipantDataModel.participantTasks.map(pt => ({
+    //     id: pt.id,
+    //     participantId: id,
+    //     taskId: pt.taskId,
+    //     progress: pt.progress,
+    //   })),
+    // })
+    // return savedSomeDataEntity
   }
 }
