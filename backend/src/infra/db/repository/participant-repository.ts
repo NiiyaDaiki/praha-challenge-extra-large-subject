@@ -18,7 +18,11 @@ export class ParticipantRepository implements IParticipantRepository {
         email,
         status,
         participantTasks: {
-          create: tasks.map(task => ({ ...task }))
+          create: tasks.map(({ participantId: _participantId, ...rest }) => ({
+            id: rest.id,
+            taskId: rest.taskId,
+            progress: rest.progress,
+          }))
         }
       },
     })
