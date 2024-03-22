@@ -11,8 +11,8 @@
     "target": "ES2022",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "paths": { "@testUtil/*": ["testUtil/*"] }
+    // "baseUrl": "./",
+    "incremental": true
+    // "paths": { "@testUtil/*": [testUtil/*"] }
   }
 }

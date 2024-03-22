@@ -1,6 +1,6 @@
-import { SomeData } from 'src/domain/some-data/some-data'
-import { createRandomIdString } from 'src/util/random'
-import { prisma } from '@testUtil/prisma'
+import { SomeData } from '../../../../domain/some-data/some-data'
+import { createRandomIdString } from '../../../../util/random'
+import { prisma } from '../../../../../testUtil/prisma'
 import { SomeDataRepository } from '../../repository/sample/some-data-repository'
 
 describe('some-data-repository.integration.ts', () => {

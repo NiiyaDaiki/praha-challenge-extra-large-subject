@@ -1,16 +1,23 @@
-type MembershipStatus = 'Active' | 'Inactive' | 'Left'
+import { ParticipantTask } from "../../domain/entity/participant-task"
+import { Task } from "../../domain/entity/task/task"
+import { createRandomIdString } from "../../util/random"
+
+export type MembershipStatus = 'ACTIVE' | 'INACTIVE' | 'LEFT'
 export class Participant {
   readonly id: string
   readonly name: string
   readonly email: string
   readonly status: MembershipStatus
+  readonly participantTasks: ParticipantTask[]
 
-  constructor(
+  private constructor(props: {
     id: string,
     name: string,
     email: string,
-    status: MembershipStatus,
-  ) {
+    status?: MembershipStatus,
+    tasks: Task[],
+  }) {
+    const { id, name, email, status = 'ACTIVE', tasks } = props
     if (!this.isValidEmail(email)) {
       throw new Error('Invalid email address provided.')
     }
@@ -18,6 +25,15 @@ export class Participant {
     this.name = name
     this.email = email
     this.status = status
+    this.participantTasks = this.addParticipantTasks(id, tasks)
+  }
+
+  static create(props: { id: string; name: string; email: string; tasks: Task[] }) {
+    return new Participant({ ...props, status: 'ACTIVE' });
+  }
+
+  static reconstruct(props: { id: string; name: string; email: string; status: MembershipStatus; tasks: Task[] }): Participant {
+    return new Participant({ ...props });
   }
 
   private isValidEmail(email: string): boolean {
@@ -25,7 +41,27 @@ export class Participant {
     return regex.test(email)
   }
 
+  public addParticipantTasks(id: string, tasks: Task[]) {
+    // TODO: 重複しているタスクを除外する
+
+    return tasks.map(task => ParticipantTask.create({
+      id: createRandomIdString(),
+      participantId: id,
+      taskId: task.id,
+    }));
+  }
+
   public isActive() {
-    return this.status === 'Active'
+    return this.status === 'ACTIVE'
+  }
+
+  public getAllProperties() {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      status: this.status,
+      tasks: this.participantTasks
+    }
   }
 }

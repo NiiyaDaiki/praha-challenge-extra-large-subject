@@ -4,8 +4,58 @@ datasource db {
 }
 
 generator client {
-  previewFeatures = ["nativeTypes"]
   provider        = "prisma-client-js"
+}
+
+model Participant {
+  id         String       @id
+  name       String
+  email      String       @unique
+  status     Status       @default(ACTIVE)
+
+  participantTasks ParticipantTask[]
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  LEFT
+}
+
+model Task {
+  id          String     @id
+  genre      Genre
+  title       String
+  description String
+
+  participantTasks    ParticipantTask[]
+}
+
+enum Genre {
+  BASIS
+  TEST
+  DATABASE
+  ARCHITECTURE
+  FRONTEND
+  TEAM_DEV
+  MVP
+}
+
+model ParticipantTask {
+  id     String     @id
+  progress Progress @default(NOT_STARTED)
+  participantId String
+  taskId String
+
+  participant Participant @relation(fields: [participantId], references: [id])
+  task   Task       @relation(fields: [taskId], references: [id])
+}
+
+enum Progress {
+  NOT_STARTED
+  IN_PROGRESS
+  IN_REVIEW
+  COMPLETED
 }
 
 model SomeData {

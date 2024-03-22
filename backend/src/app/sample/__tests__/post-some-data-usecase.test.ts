@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { SomeDataRepository } from 'src/infra/db/repository/sample/some-data-repository'
+import { SomeDataRepository } from '../../../infra/db/repository/sample/some-data-repository'
 import { PostSomeDataUseCase } from '../post-some-data-usecase'
 import { mocked } from 'ts-jest/utils'
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'

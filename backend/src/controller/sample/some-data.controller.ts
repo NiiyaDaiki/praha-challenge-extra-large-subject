@@ -4,9 +4,9 @@ import { GetSomeDataResponse } from './response/get-some-data-response'
 import { PostSomeDataRequest } from './request/post-some-data-request'
 import { GetSomeDataUseCase } from '../../app/sample/get-some-data-usecase'
 import { PostSomeDataUseCase } from '../../app/sample/post-some-data-usecase'
-import { SomeDataRepository } from 'src/infra/db/repository/sample/some-data-repository'
+import { SomeDataRepository } from '../../infra/db/repository/sample/some-data-repository'
 import { PrismaClient } from '@prisma/client'
-import { SomeDataQS } from 'src/infra/db/query-service/sample/some-data-qs'
+import { SomeDataQS } from '../../infra/db/query-service/sample/some-data-qs'
 
 @Controller({
   path: '/sample',

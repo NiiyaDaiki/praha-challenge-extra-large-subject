@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { SomeDataDTO } from 'src/app/sample/query-service-interface/some-data-qs'
+import { SomeDataDTO } from '../../../app/sample/query-service-interface/some-data-qs'
 
 export class GetSomeDataResponse {
   @ApiProperty({ type: () => [SomeData] })
