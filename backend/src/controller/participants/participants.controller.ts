@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { AddParticipantUseCase } from '../../app/sample/add-participant-usecase';
@@ -8,6 +8,8 @@ import { GetParticipantsResponse } from '../../controller/participants/response/
 import { ParticipantsQS } from '../../infra/db/query-service/sample/participants-qs';
 import { TaskQS } from '../../infra/db/query-service/sample/tasks-qs';
 import { ParticipantRepository } from '../../infra/db/repository/participant-repository';
+import { UpdateParticipantRequest } from './request/update-participant-request';
+import { UpdateParticipantUseCase } from '../../app/sample/update-participant-usecase';
 
 @Controller({
   path: '/participants'
@@ -32,6 +34,22 @@ export class ParticipantsController {
     const taskQS = new TaskQS(prisma)
     const usecase = new AddParticipantUseCase(participantRepo, taskQS)
     await usecase.do(postUserDto)
+  }
+
+  @Post(':id')
+  async updateParticipant(
+    @Param('id') id: string,
+    @Body() updateParticipantDto: UpdateParticipantRequest): Promise<void> {
+    const prisma = new PrismaClient()
+    const participantRepo = new ParticipantRepository(prisma)
+    const usecase = new UpdateParticipantUseCase(participantRepo)
+    await usecase.do({
+      id,
+      name: updateParticipantDto.name,
+      email: updateParticipantDto.email,
+      status: updateParticipantDto.status,
+
+    })
   }
 }
 
