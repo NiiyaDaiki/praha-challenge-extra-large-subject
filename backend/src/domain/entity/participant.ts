@@ -15,7 +15,7 @@ export class Participant {
     name: string,
     email: string,
     status?: MembershipStatus,
-    tasks: Task[],
+    tasks: ParticipantTask[];
   }) {
     const { id, name, email, status = 'ACTIVE', tasks } = props
     if (!this.isValidEmail(email)) {
@@ -25,14 +25,19 @@ export class Participant {
     this.name = name
     this.email = email
     this.status = status
-    this.participantTasks = this.addParticipantTasks(id, tasks)
+    this.participantTasks = tasks
   }
 
   static create(props: { id: string; name: string; email: string; tasks: Task[] }) {
-    return new Participant({ ...props, status: 'ACTIVE' });
+    const participantTasks = props.tasks.map(task => ParticipantTask.create({
+      id: createRandomIdString(),
+      participantId: props.id,
+      taskId: task.id,
+    }));
+    return new Participant({ ...props, tasks: participantTasks, status: 'ACTIVE' });
   }
 
-  static reconstruct(props: { id: string; name: string; email: string; status: MembershipStatus; tasks: Task[] }): Participant {
+  static reconstruct(props: { id: string; name: string; email: string; status: MembershipStatus; tasks: ParticipantTask[] }): Participant {
     return new Participant({ ...props });
   }
 
@@ -41,15 +46,15 @@ export class Participant {
     return regex.test(email)
   }
 
-  public addParticipantTasks(id: string, tasks: Task[]) {
-    // TODO: 重複しているタスクを除外する
+  // public addParticipantTasks(id: string, tasks: Task[]) {
+  //   // TODO: 重複しているタスクを除外する
 
-    return tasks.map(task => ParticipantTask.create({
-      id: createRandomIdString(),
-      participantId: id,
-      taskId: task.id,
-    }));
-  }
+  //   return tasks.map(task => ParticipantTask.create({
+  //     id: createRandomIdString(),
+  //     participantId: id,
+  //     taskId: task.id,
+  //   }));
+  // }
 
   public isActive() {
     return this.status === 'ACTIVE'
