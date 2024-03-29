@@ -70,6 +70,14 @@ export class ParticipantRepository implements IParticipantRepository {
         }),
       )
     })
+  }
 
+  public async delete(id: string): Promise<void> {
+    const deletedParticipantModel = await this.prismaClient.participant.delete({
+      where: { id }
+    })
+    if (!deletedParticipantModel) {
+      throw new Error('参加者が見つかりませんでした')
+    }
   }
 }
