@@ -49,14 +49,14 @@ export class ParticipantRepository implements IParticipantRepository {
   }
 
   // todo 参照系だが、qsに書かなくていいのか？
-  public async findById(id: string): Promise<Participant> {
+  public async findById(id: string): Promise<Participant | undefined> {
     const participantDataModel = await this.prismaClient.participant.findUnique({
       where: { id },
       include: { participantTasks: true }
     })
 
     if (!participantDataModel) {
-      throw new Error('参加者が見つかりませんでした')
+      return undefined
     }
 
     return Participant.reconstruct({
