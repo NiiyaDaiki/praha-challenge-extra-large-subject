@@ -59,6 +59,7 @@ export class ParticipantRepository implements IParticipantRepository {
       return undefined
     }
 
+    // todo:エンティティに変換する処理はdomain層に移動する
     return Participant.reconstruct({
       ...participantDataModel,
       tasks: participantDataModel.participantTasks.map(pt =>
