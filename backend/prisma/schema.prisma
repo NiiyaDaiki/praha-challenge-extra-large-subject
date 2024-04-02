@@ -46,8 +46,7 @@ model ParticipantTask {
   progress Progress @default(NOT_STARTED)
   participantId String
   taskId String
-  // participantが削除された時紐づくParticipantTaskも一緒に消す
-  participant Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  participant Participant @relation(fields: [participantId], references: [id])
   task   Task       @relation(fields: [taskId], references: [id])
 }
 
