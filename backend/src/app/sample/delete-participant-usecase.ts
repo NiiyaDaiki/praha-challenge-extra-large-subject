@@ -9,6 +9,8 @@ export class DeleteParticipantUseCase {
   }
   public async do(params: { id: string }) {
     const { id } = params
-    await this.participantRepo.delete(id)
+    if (await this.participantRepo.delete(id)) {
+      throw new Error('参加者が見つかりませんでした')
+    }
   }
 }

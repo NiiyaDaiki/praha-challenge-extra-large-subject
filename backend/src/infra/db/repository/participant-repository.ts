@@ -73,7 +73,7 @@ export class ParticipantRepository implements IParticipantRepository {
     })
   }
 
-  public async delete(id: string): Promise<void> {
+  public async delete(id: string): Promise<Participant | undefined> {
     const deletedParticipantModel = await this.prismaClient.participant.update({
       where: { id },
       data: {
@@ -81,7 +81,7 @@ export class ParticipantRepository implements IParticipantRepository {
       }
     })
     if (!deletedParticipantModel) {
-      throw new Error('参加者が見つかりませんでした')
+      return undefined
     }
   }
 }
