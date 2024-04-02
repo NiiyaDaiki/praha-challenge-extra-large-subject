@@ -48,7 +48,7 @@ export class ParticipantRepository implements IParticipantRepository {
     // return savedSomeDataEntity
   }
 
-  // todo 参照系だが、qsに書かなくていいのか？
+  // todo 参照系だが、qsに書かなくていいのか？ => ドメインを跨がないので、ここに書いてもいい
   public async findById(id: string): Promise<Participant | undefined> {
     const participantDataModel = await this.prismaClient.participant.findUnique({
       where: { id },
