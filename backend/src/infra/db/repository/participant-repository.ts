@@ -48,17 +48,18 @@ export class ParticipantRepository implements IParticipantRepository {
     // return savedSomeDataEntity
   }
 
-  // todo 参照系だが、qsに書かなくていいのか？
-  public async findById(id: string): Promise<Participant> {
+  // todo 参照系だが、qsに書かなくていいのか？ => ドメインを跨がないので、ここに書いてもいい
+  public async findById(id: string): Promise<Participant | undefined> {
     const participantDataModel = await this.prismaClient.participant.findUnique({
       where: { id },
       include: { participantTasks: true }
     })
 
     if (!participantDataModel) {
-      throw new Error('参加者が見つかりませんでした')
+      return undefined
     }
 
+    // todo:エンティティに変換する処理はdomain層に移動する
     return Participant.reconstruct({
       ...participantDataModel,
       tasks: participantDataModel.participantTasks.map(pt =>

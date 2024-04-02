@@ -8,6 +8,11 @@ export class UpdateParticipantUseCase {
   }
   public async do(params: { id: string, name?: string; email?: string; status?: MembershipStatus }) {
     const targetParticipant = await this.participantRepo.findById(params.id)
+
+    if (!targetParticipant) {
+      throw new Error('参加者が見つかりませんでした')
+    }
+
     const participant = Participant.reconstruct({
       id: params.id,
       name: params.name ?? targetParticipant.name,
