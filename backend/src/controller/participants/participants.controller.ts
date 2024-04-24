@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { AddParticipantUseCase } from '../../app/sample/add-participant-usecase';
@@ -10,6 +10,7 @@ import { TaskQS } from '../../infra/db/query-service/sample/tasks-qs';
 import { ParticipantRepository } from '../../infra/db/repository/participant-repository';
 import { UpdateParticipantRequest } from './request/update-participant-request';
 import { UpdateParticipantUseCase } from '../../app/sample/update-participant-usecase';
+import { DeleteParticipantUseCase } from '../../app/sample/delete-participant-usecase';
 
 @Controller({
   path: '/participants'
@@ -49,6 +50,16 @@ export class ParticipantsController {
       email: updateParticipantDto.email,
       status: updateParticipantDto.status,
 
+    })
+  }
+
+  @Delete(':id')
+  async deleteParticipant(@Param('id') id: string,): Promise<void> {
+    const prisma = new PrismaClient()
+    const participantRepo = new ParticipantRepository(prisma)
+    const usecase = new DeleteParticipantUseCase(participantRepo)
+    await usecase.do({
+      id
     })
   }
 }

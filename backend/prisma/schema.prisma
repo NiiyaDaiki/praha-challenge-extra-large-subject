@@ -46,7 +46,6 @@ model ParticipantTask {
   progress Progress @default(NOT_STARTED)
   participantId String
   taskId String
-
   participant Participant @relation(fields: [participantId], references: [id])
   task   Task       @relation(fields: [taskId], references: [id])
 }
