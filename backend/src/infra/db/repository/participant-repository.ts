@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { IParticipantRepository } from '../../../app/sample/repository-interface/participant-repository-interface'
 import { Participant } from '../../../domain/entity/participant'
+import { ParticipantTask } from '../../../domain/entity/participant-task'
 
 export class ParticipantRepository implements IParticipantRepository {
   private prismaClient: PrismaClient
@@ -11,8 +12,9 @@ export class ParticipantRepository implements IParticipantRepository {
   public async save(participantEntity: Participant): Promise<void> {
     const { id, name, email, status, tasks } = participantEntity.getAllProperties()
 
-    await this.prismaClient.participant.create({
-      data: {
+    await this.prismaClient.participant.upsert({
+      where: { id },
+      create: {
         id,
         name,
         email,
@@ -25,6 +27,12 @@ export class ParticipantRepository implements IParticipantRepository {
           }))
         }
       },
+      update: {
+        name,
+        email,
+        status,
+      }
+
     })
 
     // todo:保存操作の結果を、エンティティに変換して返すにはどうしたらいい？ 使わなければ返す必要ないか。
@@ -38,5 +46,31 @@ export class ParticipantRepository implements IParticipantRepository {
     //   })),
     // })
     // return savedSomeDataEntity
+  }
+
+  // todo 参照系だが、qsに書かなくていいのか？ => ドメインを跨がないので、ここに書いてもいい
+  public async findById(id: string): Promise<Participant | undefined> {
+    const participantDataModel = await this.prismaClient.participant.findUnique({
+      where: { id },
+      include: { participantTasks: true }
+    })
+
+    if (!participantDataModel) {
+      return undefined
+    }
+
+    // todo:エンティティに変換する処理はdomain層に移動する
+    return Participant.reconstruct({
+      ...participantDataModel,
+      tasks: participantDataModel.participantTasks.map(pt =>
+        ParticipantTask.reconstruct({
+          id: pt.id,
+          participantId: id,
+          taskId: pt.taskId,
+          progress: pt.progress,
+        }),
+      )
+    })
+
   }
 }
