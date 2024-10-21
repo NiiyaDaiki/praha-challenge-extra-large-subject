@@ -12,6 +12,7 @@ export const seedParticipants = async (prisma: PrismaClient, tasks: Task[]) => {
         name: participantData.name,
         email: participantData.email,
         status: participantData.status,
+        pairId: '1', // とりあえず固定で1を入れている
         participantTasks: {
           create: participantData.participantTasks.map((task) => ({
             id: task.id,
@@ -25,6 +26,8 @@ export const seedParticipants = async (prisma: PrismaClient, tasks: Task[]) => {
   });
 
   // すべてのPromiseが完了するのを待つ
-  await Promise.all(participantPromises);
-  console.log("10 participants seeded");
+  return await Promise.all(participantPromises).then((participant) => {
+    console.log("10 participants seeded");
+    return participant;
+  });
 }

@@ -12,9 +12,18 @@ model Participant {
   name       String
   email      String       @unique
   status     Status       @default(ACTIVE)
+  pairId     String
 
-  participantTasks ParticipantTask[]
+  participantTasks ParticipantTask[] @relation("ParticipantTasksRelation")
+  pair Pair @relation(fields: [pairId], references: [id])
 }
+
+model Pair {
+  id         String       @id
+  name       String       @unique
+  participants Participant[] 
+}
+
 
 enum Status {
   ACTIVE
@@ -46,7 +55,7 @@ model ParticipantTask {
   progress Progress @default(NOT_STARTED)
   participantId String
   taskId String
-  participant Participant @relation(fields: [participantId], references: [id])
+  participant Participant @relation(fields: [participantId], references: [id], name: "ParticipantTasksRelation")
   task   Task       @relation(fields: [taskId], references: [id])
 }
 
