@@ -25,7 +25,8 @@ export class ParticipantRepository implements IParticipantRepository {
             taskId: rest.taskId,
             progress: rest.progress,
           }))
-        }
+        },
+        pairId: '1', // todo: とりあえず固定で1を入れている
       },
       update: {
         name,

@@ -20,9 +20,14 @@ export class AddParticipantUseCase {
       name,
       email,
       tasks,
+      pairId: '1', // todo: とりあえず固定で1を入れている
     })
 
     // 参加者を保存する。
     await this.participantRepo.save(participant)
+
+    // todo ペアーへの割り振り
+
+    // todo チームへの割り振り
   }
 }

@@ -14,7 +14,9 @@ async function main() {
   const rawTasks = await prisma.task.findMany()
   const tasks = rawTasks.map(rawTask => new Task(rawTask))
   await seedParticipants(prisma, tasks)
+  // const participants = await prisma.participant.findMany()
   await seedParticipantTasks(prisma)
+  // await seedPairs(prisma)
 }
 main()
   .catch((e) => console.error(e))
