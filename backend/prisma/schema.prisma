@@ -22,6 +22,16 @@ model Pair {
   id         String       @id
   name       String       @unique
   participants Participant[] 
+  
+  teamId       String? 
+
+  team         Team?    @relation(fields: [teamId], references: [id])
+}
+
+model Team {
+  id         String       @id
+  name       String       @unique
+  pairs Pair[] 
 }
 
 
