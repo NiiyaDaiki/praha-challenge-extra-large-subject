@@ -19,7 +19,7 @@
     "dev:debug": "dotenv -e .local.env -- nest start --debug --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "yarn lint --fix",
-    "migrate:dev": "dotenv -e .local.env -- prisma migrate dev --preview-feature",
+    "migrate:dev": "dotenv -e .local.env -- prisma migrate dev",
     "model-generate": "prisma generate",
     "migrate:dev:reset": "dotenv -e .local.env -- prisma migrate reset --preview-feature",
     "migrate:test": "dotenv -e .test.env -- prisma migrate reset --force --preview-feature",
