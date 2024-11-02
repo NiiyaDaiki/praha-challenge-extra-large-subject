@@ -19,7 +19,6 @@ export class UpdateParticipantUseCase {
       email: params.email ?? targetParticipant.email,
       status: params.status ?? targetParticipant.status,
       tasks: targetParticipant.participantTasks,
-      pairId: targetParticipant.pairId,
     })
 
     await this.participantRepo.save(participant)
