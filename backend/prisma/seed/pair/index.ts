@@ -1,28 +1,23 @@
-// import { Participant, PrismaClient } from "@prisma/client"
-// import { createParticipantTestData } from "../../../testUtil/participant-data-factory";
-// import { Task } from "../../../src/domain/entity/task/task";
-// import { createPairTestData } from "../../../testUtil/pair-data-factory";
+import { PrismaClient, Team } from "@prisma/client"
+import { uuid } from "uuidv4"
 
-// export const seedPairs = async (prisma: PrismaClient) => {
-//   const participants = await prisma.participant.findMany({ include: { participantTasks: true } })
-//   // const participantTasks = await prisma.participantTask.findMany()
-//   // participants.map(participant => { 
-//   //   participantTasks.map(participantTask => {
-//   //     if(participant.id === participantTask.participantId) {
-//   //     }
-//   //   })
-//   // })
-//   // 3個のPairsデータを作成し、それらをPromiseの配列に格納する
-//   const pairPromises = Array.from({ length: 3 }, async () => {
-//     participants.map(participant => { 
-//       const pairData = createPairTestData(participant);
-//       return prisma.pair.create({
-//         data: pairData,
-//       });
-//     })
-//   });
+export const seedPairs = async (prisma: PrismaClient, prismaTeams: Team[]) => {
 
-//   // すべてのPromiseが完了するのを待つ
-//   await Promise.all(pairPromises);
-//   console.log("80 tasks seeded");
-// }
+  const team1PairsData = [
+    { id: uuid(), name: 'a', teamId: prismaTeams[0]?.id },
+    { id: uuid(), name: 'b', teamId: prismaTeams[0]?.id },
+  ]
+  const team2PairsData = [
+    { id: uuid(), name: 'c', teamId: prismaTeams[1]?.id },
+    { id: uuid(), name: 'd', teamId: prismaTeams[1]?.id },
+  ]
+
+  const allPairsData = [...team1PairsData, ...team2PairsData]
+
+  const pairs = await Promise.all(
+    allPairsData.map((data) => prisma.pair.create({ data }))
+  )
+
+  console.log(`${allPairsData.length} pairs seeded`)
+  return pairs
+}

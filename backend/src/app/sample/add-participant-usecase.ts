@@ -19,8 +19,7 @@ export class AddParticipantUseCase {
       id: createRandomIdString(),
       name,
       email,
-      tasks,
-      pairId: '1', // todo: とりあえず固定で1を入れている
+      tasks
     })
 
     // 参加者を保存する。

@@ -1,39 +1,59 @@
-import { Participant } from './participant'
+
 
 export class Pair {
   readonly id: string
   readonly name: string
-  readonly participants: Participant[]
+  private _participantIds: string[]
 
-  constructor(args: { id: string; name: string; participants: Participant[] }) {
-    const { id, name, participants } = args
+  constructor(args: { id: string; name: string; participantIds: string[] }) {
+    const { id, name, participantIds } = args
     this.isValidName(name)
-    this.isValidNumberOfParticipants(participants)
-    this.areParticipantsAllActive(participants)
-
     this.id = id
     this.name = name
-    this.participants = participants
+    this._participantIds = participantIds
+    this.isValidNumberOfParticipants()
+
   }
 
   private isValidName(name: string) {
-    const regex = /[^[a-zA-Z]$]/
+    const regex = /^[a-zA-Z]$/
     if (!regex.test(name)) {
-      throw new Error('ペア名はa-eの英文字1文字でなければなりません。')
+      throw new Error('ペア名はa-zの英文字1文字でなければなりません。')
     }
   }
 
-  private isValidNumberOfParticipants(participants: Participant[]) {
-    if (participants.length < 2 && participants.length > 3) {
+  private isValidNumberOfParticipants() {
+    console.log(`現在のペア${this.name}の人数: ${this.getParticipantIds().length}`)
+    if (this.getParticipantIds().length < 2 || this.getParticipantIds().length > 3) {
       throw new Error('ペアには2名〜3名の参加者が必要です。')
     }
   }
 
-  private areParticipantsAllActive(participants: Participant[]) {
-    if (!participants.every((participants) => participants.isActive())) {
-      throw new Error(
-        'すべての参加者がペアに参加できる状態でなければなりません。',
-      )
+  getParticipantIds(): string[] {
+    return this._participantIds
+  }
+
+  public addParticipant(memberId: string): void {
+    if (this.getParticipantIds().includes(memberId)) {
+      throw new Error('既にPairに所属しています。');
     }
+    this.getParticipantIds().push(memberId);
+    try {
+      this.isValidNumberOfParticipants();
+    } catch (e) {
+      console.log('ペアの許容人数を超えました')
+      throw e
+    }
+  }
+
+  public removeParticipant(memberId: string): void {
+    this._participantIds = this.getParticipantIds().filter(id => id !== memberId);
+    if (this.getParticipantIds().length === 0) {
+      throw new Error('Pairのメンバーが0名になりました。');
+    }
+  }
+
+  public isParticipantExist = (participantId: string): boolean => {
+    return this.getParticipantIds().includes(participantId)
   }
 }
