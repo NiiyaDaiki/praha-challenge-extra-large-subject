@@ -1,5 +1,5 @@
-import { uuid } from 'uuidv4'
 import { Pair } from '../../domain/entity/pair'
+import { createRandomIdString } from '../../util/random'
 
 export class Team {
   readonly id: string
@@ -43,6 +43,23 @@ export class Team {
     return this.pairs.reduce((sum, pair) => sum + pair.getParticipantIds().length, 0);
   }
 
+
+  public addParticipant(participantId: string): void {
+    const targetPairs = this.getMinParticipantPair()
+
+    // 最小参加人数のペアからランダムに選択する
+    const targetPair = targetPairs[Math.floor(Math.random() * targetPairs.length)]
+    if (!targetPair) {
+      throw new Error('ペアが見つかりませんでした')
+    }
+
+    try {
+      targetPair.addParticipant(participantId)
+    } catch (e) {
+      this.reallocatePair(targetPair)
+    }
+  }
+
   public removeParticipant(participantId: string): void {
     const targetPair = this.pairs.find(pair => pair.isParticipantExist(participantId));
     if (!targetPair) {
@@ -55,40 +72,83 @@ export class Team {
     }
   }
 
+  public getMinParticipantPair(): Pair[] {
+    // 最も参加人数が少ないペアを取得する
+    let minPairCount = 0
+    let targetPairs: Pair[] = []
+    for (const pair of this.pairs) {
+      const participantCount = pair.getParticipantIds().length
+      if (minPairCount === 0 || participantCount < minPairCount) {
+        minPairCount = participantCount
+        targetPairs = [pair]
+      } else if (participantCount === minPairCount) {
+        targetPairs.push(pair)
+      }
+    }
+    return targetPairs
+  }
+
+
+
   private reallocatePair(pair: Pair): void {
-    // 他のPairに合流
+    const participantCount = pair.getParticipantIds().length;
+    if (participantCount === 1) {
+      // 参加者が1名の場合、他のペアに合流
+      this.mergePair(pair);
+    } else if (participantCount === 4) {
+      // 参加者が4名の場合、ペアを分割
+      this.splitPair(pair);
+    }
+
+  }
+
+  private mergePair(pair: Pair): void {
     const targetPair = this.pairs
       .filter(p => p !== pair)
       .sort((a, b) => a.getParticipantIds().length - b.getParticipantIds().length)[0];
+
     if (!targetPair) {
-      throw new Error('合流先のPairが見つかりませんでした');
+      throw new Error('合流先のペアが見つかりませんでした');
     }
-    // 一人だけのPairの参加者を他のPairに移動
+
+    // 一人だけのペアの参加者を他のペアに移動
     const moveParticipantId = pair.getParticipantIds()[0];
     if (!moveParticipantId) {
       throw new Error('移動する参加者が見つかりませんでした');
     }
-    try {
-      targetPair.addParticipant(moveParticipantId);
-    } catch (e) {
-      // 4人になった場合
-      console.log(`チーム${this.name}のペア${targetPair.name}が4人になったためペアを分割します`);
-      // ランダムに一人を選択
-      const randomParticipantId = targetPair.getParticipantIds()[Math.floor(Math.random() * targetPair.getParticipantIds().length)];
-      if (!randomParticipantId) {
-        throw new Error('ランダムに選択する参加者が見つかりませんでした');
-      }
-      // ランダムに選ばれた参加者と一人だけのPairの参加者を新しいPairに移動
-      // 新しいPairを作成
-      const newPair = new Pair({ id: uuid(), name: this.generateNewPairName(), participantIds: [moveParticipantId, randomParticipantId] });
-      // 新しいPairを追加
-      this.pairs.push(newPair)
-      console.log(`チーム${this.name}の新しいペア${newPair.name}を作成し、${moveParticipantId}と${randomParticipantId}を追加しました`);
-    }
-    // 元のPairを削除
+    targetPair.addParticipant(moveParticipantId);
+
+    // 元のペアを削除
+    this.pairs = this.pairs.filter(p => p !== pair);
+  }
+
+  private splitPair(pair: Pair): void {
+    // 参加者を2つのグループに分割
+    const participantIds = pair.getParticipantIds();
+    const shuffledIds = participantIds.sort(() => 0.5 - Math.random());
+    const groupSize = Math.ceil(shuffledIds.length / 2);
+    const group1Ids = shuffledIds.slice(0, groupSize);
+    const group2Ids = shuffledIds.slice(groupSize);
+
+    // 古いペアを削除
     this.pairs = this.pairs.filter(p => p !== pair);
 
+    // 新しいペアを作成
+    const newPair1 = new Pair({
+      id: createRandomIdString(),
+      name: this.generateNewPairName(),
+      participantIds: group1Ids,
+    });
 
+    this.pairs.push(newPair1); // newPair2作成前に先に追加しないとペア名が重複してしまう
+
+    const newPair2 = new Pair({
+      id: createRandomIdString(),
+      name: this.generateNewPairName(),
+      participantIds: group2Ids,
+    });
+
+    this.pairs.push(newPair2);
   }
 
   private generateNewPairName(): string {
