@@ -67,11 +67,11 @@ model ParticipantTask {
   taskId String
   participant Participant @relation(fields: [participantId], references: [id], name: "ParticipantTasksRelation")
   task   Task       @relation(fields: [taskId], references: [id])
+  @@unique([participantId, taskId])
 }
 
 enum Progress {
   NOT_STARTED
-  IN_PROGRESS
   IN_REVIEW
   COMPLETED
 }
