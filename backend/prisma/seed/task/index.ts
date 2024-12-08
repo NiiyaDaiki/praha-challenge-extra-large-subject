@@ -11,6 +11,7 @@ export const seedTasks = async (prisma: PrismaClient) => {
   });
 
   // すべてのPromiseが完了するのを待つ
-  await Promise.all(taskPromises);
+  const tasks = await Promise.all(taskPromises);
   console.log("80 tasks seeded");
+  return tasks
 }

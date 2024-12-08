@@ -1,1 +1,1 @@
-export type Progress = 'NOT_STARTED' | 'IN_PROGRESS' | 'IN_REVIEW' | 'COMPLETED'
+export type Progress = 'NOT_STARTED' | 'IN_REVIEW' | 'COMPLETED'

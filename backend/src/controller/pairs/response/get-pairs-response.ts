@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { PairDTO } from '../../../app/sample/query-service-interface/pairs-qs'
+import { ParticipantDTO } from '../../../app/sample/query-service-interface/participants-qs'
 
 export class GetPairsResponse {
   @ApiProperty({ type: () => [Pair] })
@@ -7,10 +8,11 @@ export class GetPairsResponse {
 
   public constructor(params: { pairs: PairDTO[] }) {
     const { pairs } = params
-    this.pairs = pairs.map(({ id, name }) => {
+    this.pairs = pairs.map(({ id, name, participants }) => {
       return new Pair({
         id,
-        name
+        name,
+        participants
       })
     })
   }
@@ -23,11 +25,16 @@ class Pair {
   @ApiProperty()
   name: string
 
+  @ApiProperty()
+  participants: ParticipantDTO[]
+
   public constructor(params: {
     id: string
     name: string
+    participants: ParticipantDTO[]
   }) {
     this.id = params.id
     this.name = params.name
+    this.participants = params.participants
   }
 }
