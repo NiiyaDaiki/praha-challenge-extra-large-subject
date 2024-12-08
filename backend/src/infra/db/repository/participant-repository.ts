@@ -26,7 +26,6 @@ export class ParticipantRepository implements IParticipantRepository {
             progress: rest.progress,
           }))
         },
-        pairId: '1', // todo: とりあえず固定で1を入れている
       },
       update: {
         name,
@@ -74,15 +73,60 @@ export class ParticipantRepository implements IParticipantRepository {
     })
   }
 
-  public async delete(id: string): Promise<Participant | undefined> {
-    const deletedParticipantModel = await this.prismaClient.participant.update({
-      where: { id },
-      data: {
-        status: 'LEFT',
-      }
+  public async findByEmail(email: string): Promise<Participant | undefined> {
+    const participantDataModel = await this.prismaClient.participant.findUnique({
+      where: { email },
+      include: { participantTasks: true }
     })
-    if (!deletedParticipantModel) {
+
+    if (!participantDataModel) {
       return undefined
     }
+
+    return Participant.reconstruct({
+      ...participantDataModel,
+      tasks: participantDataModel.participantTasks.map(pt =>
+        ParticipantTask.reconstruct({
+          id: pt.id,
+          participantId: participantDataModel.id,
+          taskId: pt.taskId,
+          progress: pt.progress,
+        }),
+      )
+    })
   }
+
+  public async delete(id: string): Promise<Participant | undefined> {
+    try {
+      const deletedParticipantModel = await this.prismaClient.$transaction(async (prisma) => {
+        // 関連する ParticipantTask を削除
+        await prisma.participantTask.deleteMany({
+          where: { participantId: id }
+        });
+
+        // Participant を削除
+        const participant = await prisma.participant.delete({
+          where: { id },
+          include: { participantTasks: true }
+        });
+        return participant;
+      });
+
+      return Participant.reconstruct({
+        ...deletedParticipantModel,
+        tasks: deletedParticipantModel.participantTasks.map(pt =>
+          ParticipantTask.reconstruct({
+            id: pt.id,
+            participantId: id,
+            taskId: pt.taskId,
+            progress: pt.progress,
+          }),
+        )
+      }) || undefined;
+    } catch (error) {
+      console.error('participantとparticipantTask削除中にエラーが発生しました:', error)
+      throw error
+    }
+  }
+
 }
