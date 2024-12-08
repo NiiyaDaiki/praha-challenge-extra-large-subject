@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseArrayPipe, Post, Query } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { AddParticipantUseCase } from '../../app/sample/add-participant-usecase';
@@ -12,6 +12,9 @@ import { UpdateParticipantUseCase } from '../../app/sample/update-participant-us
 import { DeleteParticipantUseCase } from '../../app/sample/delete-participant-usecase';
 import { TeamRepository } from '../../infra/db/repository/team-repository';
 import { TaskRepository } from '../../infra/db/repository/task-repository';
+import { SearchParticipantsResponse } from './response/search-participants-response';
+import { SearchParticipantsUseCase } from '../../app/sample/search-participants-usecase';
+import { ParticipantTasksQS } from '../../infra/db/query-service/sample/participant-task-qs';
 
 @Controller({
   path: '/participants'
@@ -26,6 +29,27 @@ export class ParticipantsController {
     const usecase = new GetParticipantsUseCase(qs)
     const result = await usecase.do()
     const response = new GetParticipantsResponse({ participants: result })
+    return response
+  }
+
+  @Get('search')
+  @ApiResponse({ status: 200, type: SearchParticipantsResponse })
+  // 特定の課題（複数可能）が特定の進捗ステータスになっている参加者を10人単位でページングして取得する
+  async searchParticipants(
+    // taskIdが一つだった場合も配列で受け取るようにする
+    @Query('taskIds', new ParseArrayPipe({ items: String })) taskIds: string[],
+    @Query('progress') progress: string,
+    @Query('cursor') cursor?: string,
+  ): Promise<SearchParticipantsResponse> {
+    const prisma = new PrismaClient()
+    const qs = new ParticipantTasksQS(prisma)
+    const usecase = new SearchParticipantsUseCase(qs)
+    const result = await usecase.do({
+      taskIds,
+      progress,
+      cursor
+    })
+    const response = new SearchParticipantsResponse({ participantTasks: result })
     return response
   }
 
