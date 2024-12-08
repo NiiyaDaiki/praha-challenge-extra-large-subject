@@ -10,11 +10,11 @@ export class Team {
   constructor(props: { id: string, name: string, pairs: Pair[] }) {
     const { id, name, pairs } = props
     this.isValidName(name)
-    this.isUniquePairName(pairs)
 
     this.name = name
     this.id = id
     this.pairs = pairs
+    this.isUniquePairName(pairs)
   }
 
   public getAllProperties() {
@@ -100,6 +100,7 @@ export class Team {
     if (oldParticipantIds.length !== newParticipantIds.length || diff.length !== 0) {
       throw new Error('ペアの参加者が変更されています');
     }
+    this.pairs = pairs
     this.isUniquePairName(pairs)
   }
 
@@ -203,7 +204,6 @@ export class Team {
     const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     for (const char of alphabet) {
       if (!existingNames.includes(char)) {
-        console.log(char);
         return char;
       }
     }
