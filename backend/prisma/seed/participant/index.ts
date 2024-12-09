@@ -4,7 +4,7 @@ import { Task } from "../../../src/domain/entity/task/task";
 
 export const seedParticipants = async (prisma: PrismaClient, tasks: Task[]) => {
   // 3名のparticipantデータを作成し、それらをPromiseの配列に格納する
-  const participantPromises = Array.from({ length: 3 }, async () => {
+  const participantPromises = Array.from({ length: 6 }, async () => {
     const participantData = createParticipantTestData(tasks);
     return prisma.participant.create({
       data: {
@@ -27,7 +27,7 @@ export const seedParticipants = async (prisma: PrismaClient, tasks: Task[]) => {
 
   // すべてのPromiseが完了するのを待つ
   return await Promise.all(participantPromises).then((participant) => {
-    console.log("10 participants seeded");
+    console.log("6 participants seeded");
     return participant;
   });
 }
