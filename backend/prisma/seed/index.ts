@@ -2,21 +2,20 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient({})
 import { seedParticipants } from './participant'
 import { seedTasks } from './task'
-import { seedParticipantTasks } from './participantTask'
-import { Task } from '../../src/domain/entity/task/task'
+import { seedTeams } from './team'
+import { seedPairs } from './pair'
 
 async function main() {
+  await prisma.team.deleteMany()
+  await prisma.pair.deleteMany()
   await prisma.participantTask.deleteMany()
   await prisma.task.deleteMany()
   await prisma.participant.deleteMany()
 
-  await seedTasks(prisma)
-  const rawTasks = await prisma.task.findMany()
-  const tasks = rawTasks.map(rawTask => new Task(rawTask))
-  await seedParticipants(prisma, tasks)
-  // const participants = await prisma.participant.findMany()
-  await seedParticipantTasks(prisma)
-  // await seedPairs(prisma)
+  const tasks = await seedTasks(prisma)
+  const teams = await seedTeams(prisma)
+  const pairs = await seedPairs(prisma, teams)
+  await seedParticipants(prisma, tasks, pairs)
 }
 main()
   .catch((e) => console.error(e))
