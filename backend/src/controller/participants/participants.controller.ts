@@ -6,11 +6,12 @@ import { GetParticipantsUseCase } from '../../app/sample/get-participants-usecas
 import { AddParticipantRequest } from '../../controller/participants/request/add-participant-request';
 import { GetParticipantsResponse } from '../../controller/participants/response/get-participants-response';
 import { ParticipantsQS } from '../../infra/db/query-service/sample/participants-qs';
-import { TaskQS } from '../../infra/db/query-service/sample/tasks-qs';
 import { ParticipantRepository } from '../../infra/db/repository/participant-repository';
 import { UpdateParticipantRequest } from './request/update-participant-request';
 import { UpdateParticipantUseCase } from '../../app/sample/update-participant-usecase';
 import { DeleteParticipantUseCase } from '../../app/sample/delete-participant-usecase';
+import { TeamRepository } from '../../infra/db/repository/team-repository';
+import { TaskRepository } from '../../infra/db/repository/task-repository';
 
 @Controller({
   path: '/participants'
@@ -32,8 +33,9 @@ export class ParticipantsController {
   async addParticipant(@Body() postUserDto: AddParticipantRequest): Promise<void> {
     const prisma = new PrismaClient()
     const participantRepo = new ParticipantRepository(prisma)
-    const taskQS = new TaskQS(prisma)
-    const usecase = new AddParticipantUseCase(participantRepo, taskQS)
+    const taskRepo = new TaskRepository(prisma)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new AddParticipantUseCase(participantRepo, taskRepo, teamRepo)
     await usecase.do(postUserDto)
   }
 
@@ -41,15 +43,16 @@ export class ParticipantsController {
   async updateParticipant(
     @Param('id') id: string,
     @Body() updateParticipantDto: UpdateParticipantRequest): Promise<void> {
+    console.log(updateParticipantDto)
     const prisma = new PrismaClient()
     const participantRepo = new ParticipantRepository(prisma)
-    const usecase = new UpdateParticipantUseCase(participantRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new UpdateParticipantUseCase(participantRepo, teamRepo)
     await usecase.do({
       id,
       name: updateParticipantDto.name,
       email: updateParticipantDto.email,
-      status: updateParticipantDto.status,
-
+      status: updateParticipantDto.status
     })
   }
 
@@ -57,7 +60,8 @@ export class ParticipantsController {
   async deleteParticipant(@Param('id') id: string,): Promise<void> {
     const prisma = new PrismaClient()
     const participantRepo = new ParticipantRepository(prisma)
-    const usecase = new DeleteParticipantUseCase(participantRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new DeleteParticipantUseCase(participantRepo, teamRepo)
     await usecase.do({
       id
     })
