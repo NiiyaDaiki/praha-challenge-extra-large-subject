@@ -2,13 +2,19 @@ import { ParticipantTask } from "../../domain/entity/participant-task"
 import { Task } from "../../domain/entity/task/task"
 import { createRandomIdString } from "../../util/random"
 
-export type MembershipStatus = 'ACTIVE' | 'INACTIVE' | 'LEFT'
+export const MembershipStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  LEFT: 'LEFT'
+} as const;
+
+export type MembershipStatus = typeof MembershipStatus[keyof typeof MembershipStatus];
+
 export class Participant {
   readonly id: string
   readonly name: string
   readonly email: string
   readonly status: MembershipStatus
-  readonly pairId: string
   readonly participantTasks: ParticipantTask[]
 
   private constructor(props: {
@@ -16,22 +22,20 @@ export class Participant {
     name: string,
     email: string,
     status?: MembershipStatus,
-    pairId: string,
     tasks: ParticipantTask[];
   }) {
-    const { id, name, email, status = 'ACTIVE', pairId, tasks } = props
+    const { id, name, email, status = 'ACTIVE', tasks } = props
     if (!this.isValidEmail(email)) {
-      throw new Error('Invalid email address provided.')
+      throw new Error('無効なメールアドレスが指定されました')
     }
     this.id = id
     this.name = name
     this.email = email
     this.status = status
-    this.pairId = pairId
     this.participantTasks = tasks
   }
 
-  static create(props: { id: string; name: string; email: string; tasks: Task[], pairId: string }) {
+  static create(props: { id: string; name: string; email: string; tasks: Task[] }) {
     const participantTasks = props.tasks.map(task => ParticipantTask.create({
       id: createRandomIdString(),
       participantId: props.id,
@@ -40,7 +44,7 @@ export class Participant {
     return new Participant({ ...props, tasks: participantTasks, status: 'ACTIVE' });
   }
 
-  static reconstruct(props: { id: string; name: string; email: string; status: MembershipStatus; tasks: ParticipantTask[], pairId: string }): Participant {
+  static reconstruct(props: { id: string; name: string; email: string; status: MembershipStatus; tasks: ParticipantTask[] }): Participant {
     return new Participant({ ...props });
   }
 
@@ -48,16 +52,6 @@ export class Participant {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     return regex.test(email)
   }
-
-  // public addParticipantTasks(id: string, tasks: Task[]) {
-  //   // TODO: 重複しているタスクを除外する
-
-  //   return tasks.map(task => ParticipantTask.create({
-  //     id: createRandomIdString(),
-  //     participantId: id,
-  //     taskId: task.id,
-  //   }));
-  // }
 
   public isActive() {
     return this.status === 'ACTIVE'
@@ -69,7 +63,6 @@ export class Participant {
       name: this.name,
       email: this.email,
       status: this.status,
-      pairId: this.pairId,
       tasks: this.participantTasks
     }
   }
