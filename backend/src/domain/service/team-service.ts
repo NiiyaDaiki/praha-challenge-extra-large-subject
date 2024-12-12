@@ -11,10 +11,6 @@ export class TeamService {
     console.log('最小の参加者数を持つチームを取得します');
     const teams = await this.teamRepo.findAll();
 
-    if (teams.length === 0) {
-      throw new Error('チームが存在しません');
-    }
-
     // 最小の参加者数を計算
     const minParticipantCount = Math.min(
       ...teams.map(team => team.getTotalParticipantCount())
@@ -25,9 +21,6 @@ export class TeamService {
       team => team.getTotalParticipantCount() === minParticipantCount
     );
 
-    if (minTeams.length === 0) {
-      throw new Error('最小の参加者数を持つチームが見つかりませんでした');
-    }
     console.log(`最小の参加者数を持つチーム: ${minTeams.map(team => team.name)}`);
     return minTeams;
   }
