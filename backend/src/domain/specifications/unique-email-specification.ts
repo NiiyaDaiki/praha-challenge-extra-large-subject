@@ -1,4 +1,4 @@
-import { IParticipantRepository } from "../../app/sample/repository-interface/participant-repository-interface.js";
+import { IParticipantRepository } from "../../app/repository-interface/participant-repository-interface.js";
 
 export class UniqueEmailSpecification {
   private participantRepository: IParticipantRepository

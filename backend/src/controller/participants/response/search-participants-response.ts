@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { MembershipStatus } from '../../../domain/entity/participant'
-import { SearchParticipantTasksDTO } from '../../../app/sample/query-service-interface/participant-tasks-qs'
+import { SearchParticipantTasksDTO } from '../../../app/query-service-interface/participant-tasks-qs'
 import { Progress } from '../../../domain/entity/task/progress'
 
 export class SearchParticipantsResponse {

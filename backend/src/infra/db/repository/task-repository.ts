@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { ITaskRepository } from '../../../app/sample/repository-interface/task-repository-interface'
+import { ITaskRepository } from '../../../app/repository-interface/task-repository-interface'
 import { Task } from '../../../domain/entity/task/task'
 
 export class TaskRepository implements ITaskRepository {
