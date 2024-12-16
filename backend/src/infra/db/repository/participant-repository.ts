@@ -26,7 +26,6 @@ export class ParticipantRepository implements IParticipantRepository {
             progress: rest.progress,
           }))
         },
-        pairId: '1', // todo: とりあえず固定で1を入れている
       },
       update: {
         name,
@@ -67,6 +66,29 @@ export class ParticipantRepository implements IParticipantRepository {
         ParticipantTask.reconstruct({
           id: pt.id,
           participantId: id,
+          taskId: pt.taskId,
+          progress: pt.progress,
+        }),
+      )
+    })
+  }
+
+  public async findByEmail(email: string): Promise<Participant | undefined> {
+    const participantDataModel = await this.prismaClient.participant.findUnique({
+      where: { email },
+      include: { participantTasks: true }
+    })
+
+    if (!participantDataModel) {
+      return undefined
+    }
+
+    return Participant.reconstruct({
+      ...participantDataModel,
+      tasks: participantDataModel.participantTasks.map(pt =>
+        ParticipantTask.reconstruct({
+          id: pt.id,
+          participantId: participantDataModel.id,
           taskId: pt.taskId,
           progress: pt.progress,
         }),
