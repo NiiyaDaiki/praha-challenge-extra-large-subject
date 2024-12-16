@@ -12,15 +12,15 @@ model Participant {
   name       String
   email      String       @unique
   status     Status       @default(ACTIVE)
-  pairId     String
+  pairId     String?
 
   participantTasks ParticipantTask[] @relation("ParticipantTasksRelation")
-  pair Pair @relation(fields: [pairId], references: [id])
+  pair Pair? @relation(fields: [pairId], references: [id])
 }
 
 model Pair {
   id         String       @id
-  name       String       @unique
+  name       String       
   participants Participant[] 
   
   teamId       String? 

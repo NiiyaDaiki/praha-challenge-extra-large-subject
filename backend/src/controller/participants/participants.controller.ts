@@ -11,6 +11,7 @@ import { ParticipantRepository } from '../../infra/db/repository/participant-rep
 import { UpdateParticipantRequest } from './request/update-participant-request';
 import { UpdateParticipantUseCase } from '../../app/sample/update-participant-usecase';
 import { DeleteParticipantUseCase } from '../../app/sample/delete-participant-usecase';
+import { TeamRepository } from '../../infra/db/repository/team-repository';
 
 @Controller({
   path: '/participants'
@@ -57,7 +58,8 @@ export class ParticipantsController {
   async deleteParticipant(@Param('id') id: string,): Promise<void> {
     const prisma = new PrismaClient()
     const participantRepo = new ParticipantRepository(prisma)
-    const usecase = new DeleteParticipantUseCase(participantRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new DeleteParticipantUseCase(participantRepo, teamRepo)
     await usecase.do({
       id
     })
