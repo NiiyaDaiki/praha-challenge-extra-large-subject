@@ -2,7 +2,14 @@ import { ParticipantTask } from "../../domain/entity/participant-task"
 import { Task } from "../../domain/entity/task/task"
 import { createRandomIdString } from "../../util/random"
 
-export type MembershipStatus = 'ACTIVE' | 'INACTIVE' | 'LEFT'
+const MembershipStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  LEFT: 'LEFT'
+} as const;
+
+export type MembershipStatus = typeof MembershipStatus[keyof typeof MembershipStatus];
+
 export class Participant {
   readonly id: string
   readonly name: string
