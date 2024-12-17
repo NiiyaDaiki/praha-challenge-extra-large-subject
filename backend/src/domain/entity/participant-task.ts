@@ -46,6 +46,7 @@ export class ParticipantTask {
   }
 
   public setProgress(progress: Progress) {
+    if (progress === this.progress) return
     if (this.progress === 'COMPLETED') {
       throw new Error('ステータスが完了のタスクはステータスを変更できません')
     }

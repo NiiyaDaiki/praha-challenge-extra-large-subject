@@ -5,14 +5,16 @@ export class Team {
   readonly id: string
   readonly name: string
   private pairs: Pair[]
+  public readonly MIN_MEMBER = 3
 
   constructor(props: { id: string, name: string, pairs: Pair[] }) {
     const { id, name, pairs } = props
     this.isValidName(name)
 
-    this.id = id
     this.name = name
+    this.id = id
     this.pairs = pairs
+    this.isUniquePairName(pairs)
   }
 
   public getAllProperties() {
@@ -61,6 +63,7 @@ export class Team {
   }
 
   public removeParticipant(participantId: string): void {
+    console.log(`チーム${this.name}から参加者${participantId}を削除します`);
     const targetPair = this.pairs.find(pair => pair.isParticipantExist(participantId));
     if (!targetPair) {
       throw new Error('ペアが見つかりませんでした');
@@ -88,7 +91,51 @@ export class Team {
     return targetPairs
   }
 
+  public reassignPairParticipants(pairs: Pair[]): void {
+    const oldParticipantIds = this.pairs.flatMap(p => p.getParticipantIds())
+    const newParticipantIds = pairs.flatMap(p => p.getParticipantIds())
 
+    // 参加者の追加、削除、重複がある場合はエラー
+    const diff = oldParticipantIds.filter(id => !newParticipantIds.includes(id))
+    if (oldParticipantIds.length !== newParticipantIds.length || diff.length !== 0) {
+      throw new Error('ペアの参加者が変更されています');
+    }
+    this.pairs = pairs
+    this.isUniquePairName(pairs)
+  }
+
+  public getPair(pairId: string) {
+    const pair = this.pairs.find((pair) => pair.id === pairId)
+    if (!pair) {
+      throw new Error('ペアが見つかりませんでした')
+    }
+    return pair
+  }
+
+  public addPair = (pair: Pair): void => {
+    this.pairs.push(pair)
+    this.isUniquePairName(this.pairs)
+  }
+
+  public deletePair = (pairId: string): void => {
+    this.pairs = this.pairs.filter((pair) => pair.id !== pairId)
+    this.checkTeamParticipantCount()
+  }
+
+  private checkTeamParticipantCount(): void {
+    if (!(this.getTotalParticipantCount() >= this.MIN_MEMBER)) {
+      throw new Error(`チームの参加者数は${this.MIN_MEMBER}人以上必要です`)
+    }
+  }
+
+  private isUniquePairName(pairs: Pair[]): void {
+    // ペア名の重複チェック
+    const pairNames = pairs.map(p => p.name);
+    const uniquePairNames = new Set(pairNames);
+    if (pairNames.length !== uniquePairNames.size) {
+      throw new Error(`チーム名:${this.name}のペア名が重複しています`);
+    }
+  }
 
   private reallocatePair(pair: Pair): void {
     const participantCount = pair.getParticipantIds().length;
@@ -116,6 +163,7 @@ export class Team {
     if (!moveParticipantId) {
       throw new Error('移動する参加者が見つかりませんでした');
     }
+    console.log(`ペア${pair.name}の参加者${moveParticipantId}をペア${targetPair.name}に移動します`);
     targetPair.addParticipant(moveParticipantId);
 
     // 元のペアを削除
@@ -156,7 +204,6 @@ export class Team {
     const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     for (const char of alphabet) {
       if (!existingNames.includes(char)) {
-        console.log(char);
         return char;
       }
     }
