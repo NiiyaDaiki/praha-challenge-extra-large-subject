@@ -3,7 +3,8 @@ import { IParticipantRepository } from './repository-interface/participant-repos
 import { createRandomIdString } from '../../util/random';
 import { ITaskRepository } from './repository-interface/task-repository-interface';
 import { ITeamRepository } from './repository-interface/team-repository-interface';
-import { Team } from '../../domain/entity/team';
+import { UniqueEmailSpecification } from '../../domain/specifications/unique-email-specification';
+import { TeamService } from '../../domain/service/team-service';
 
 export class AddParticipantUseCase {
   public constructor(
@@ -19,8 +20,10 @@ export class AddParticipantUseCase {
     const { name, email } = params
 
     // メールアドレスの重複チェック
-    const existingParticipant = await this.participantRepo.findByEmail(email);
-    if (existingParticipant) {
+    const spec = new UniqueEmailSpecification(this.participantRepo)
+    const isSatisfy = await spec.isSatisfiedBy(params.email)
+    console.log(isSatisfy)
+    if (!isSatisfy) {
       throw new Error("このメールアドレスは既に登録されています");
     }
 
@@ -37,25 +40,16 @@ export class AddParticipantUseCase {
 
 
     // 最も参加人数が少ないチームを取得する(今回はチームが存在しない場合は考慮する必要はない)
-    // todo TeamServiceを作成して、最も参加人数が少ないチームを取得する処理を移譲する
-    const allTeams = await this.teamRepo.findAll()
-    let minParticipantCount = 0
-    let targetTeams: Team[] = []
-    for (const team of allTeams) {
-      const participantCount = team.getTotalParticipantCount()
-      if (minParticipantCount === 0 || participantCount < minParticipantCount) {
-        minParticipantCount = participantCount
-        targetTeams = [team]
-      } else if (participantCount === minParticipantCount) {
-        targetTeams.push(team)
-      }
-    }
-    // 最小参加人数のチームからランダムに選択する
-    const targetTeam = targetTeams[Math.floor(Math.random() * targetTeams.length)]
-    if (!targetTeam) {
+    const service = new TeamService(this.teamRepo)
+    const minTeams = await service.findTeamWithLeastParticipants()
+    if (minTeams.length === 0) {
       throw new Error('チームが見つかりませんでした')
     }
-
+    // 最小参加人数のチームからランダムに選択する
+    const targetTeam = minTeams[Math.floor(Math.random() * minTeams.length)]
+    if (!targetTeam) {
+      throw new Error('参加対象になるチームが見つかりませんでした')
+    }
     // 参加者をチームに追加する
     targetTeam.addParticipant(participant.id)
 
