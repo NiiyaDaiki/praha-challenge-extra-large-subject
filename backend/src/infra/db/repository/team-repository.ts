@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { ITeamRepository } from '../../../app/sample/repository-interface/team-repository-interface'
+import { ITeamRepository } from '../../../app/repository-interface/team-repository-interface'
 import { Team } from '../../../domain/entity/team'
 import { Pair } from '../../../domain/entity/pair'
 
@@ -35,6 +35,68 @@ export class TeamRepository implements ITeamRepository {
           ),
         })
     );
+  }
+
+  public async findById(id: string): Promise<Team | undefined> {
+    const teamDataModel = await this.prismaClient.team.findUnique({
+      include: {
+        pairs: {
+          include: {
+            participants: true,
+          },
+        },
+      },
+      where: { id },
+    });
+
+    if (!teamDataModel) {
+      return undefined;
+    }
+
+    return new Team({
+      id: teamDataModel.id,
+      name: teamDataModel.name,
+      pairs: teamDataModel.pairs.map(
+        (pair) =>
+          new Pair({
+            id: pair.id,
+            name: pair.name,
+            participantIds: pair.participants.map((p) => p.id),
+          })
+      ),
+    });
+  }
+
+  public async findByPairId(pairId: string): Promise<Team | null> {
+    const pair = await this.prismaClient.pair.findUnique({
+      include: {
+        team: {
+          include: {
+            pairs: {
+              include: {
+                participants: true
+              }
+            }
+          }
+        }
+      },
+      where: { id: pairId }
+    })
+    if (!pair || !pair.team) {
+      return null
+    }
+
+    return new Team({
+      id: pair.team.id,
+      name: pair.team.name,
+      pairs: pair.team.pairs.map((pair) => {
+        return new Pair({
+          id: pair.id,
+          name: pair.name,
+          participantIds: pair.participants.map((participant) => participant.id)
+        })
+      })
+    })
   }
 
   public async findByParticipantId(participantId: string): Promise<Team | undefined> {

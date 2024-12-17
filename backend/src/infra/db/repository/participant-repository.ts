@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { IParticipantRepository } from '../../../app/sample/repository-interface/participant-repository-interface'
+import { IParticipantRepository } from '../../../app/repository-interface/participant-repository-interface'
 import { Participant } from '../../../domain/entity/participant'
 import { ParticipantTask } from '../../../domain/entity/participant-task'
 
