@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      prisma-test-db:
+      prisma-db:
         image: postgres:12
         ports:
-          - 5402:5432
+          - 5403:5432
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: prisma2020
@@ -24,15 +24,18 @@ jobs:
           --health-retries 5
 
     env:
-      POSTGRES_HOST: prisma-test-db
-      POSTGRES_PORT: 5432
+      # サービスコンテナのホスト側のポートを利用するので、ホストは localhost
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5403
       POSTGRES_USER: root
       POSTGRES_PASSWORD: prisma2020
       POSTGRES_DB: prisma
-      DATABASE_URL: postgres://root:prisma2020@prisma-test-db:5432/prisma
+      DATABASE_URL: postgres://root:prisma2020@localhost:5403/prisma
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -43,13 +46,6 @@ jobs:
       - name: Seed database
         working-directory: backend
         run: npx prisma db seed
-      - name: Wait for database
-        working-directory: backend
-        run: |
-          until nc -z prisma-test-db 5432; do
-            echo "Waiting for database to be ready...";
-            sleep 2;
-          done
       - name: Run integration tests
         working-directory: backend
         run: npm run test:e2e
