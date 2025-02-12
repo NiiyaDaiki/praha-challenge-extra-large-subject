@@ -23,7 +23,6 @@ export class Pair {
   }
 
   private isValidNumberOfParticipants() {
-    console.log(`現在のペア${this.name}の人数: ${this.getParticipantIds().length}`)
     if (this.getParticipantIds().length < 2 || this.getParticipantIds().length > 3) {
       throw new Error('ペアには2名〜3名の参加者が必要です。')
     }
@@ -34,6 +33,7 @@ export class Pair {
   }
 
   public addParticipant(memberId: string): void {
+    console.log(`${this.name}に${memberId}を追加します。`)
     if (this.getParticipantIds().includes(memberId)) {
       throw new Error('既にPairに所属しています。');
     }
@@ -47,6 +47,7 @@ export class Pair {
   }
 
   public removeParticipant(memberId: string): void {
+    console.log(`${this.name}から${memberId}を削除します。`)
     this._participantIds = this.getParticipantIds().filter(id => id !== memberId);
     if (this.getParticipantIds().length === 0) {
       throw new Error('Pairのメンバーが0名になりました。');

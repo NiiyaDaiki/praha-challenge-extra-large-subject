@@ -61,6 +61,7 @@ export class Team {
   }
 
   public removeParticipant(participantId: string): void {
+    console.log(`チーム${this.name}から参加者${participantId}を削除します`);
     const targetPair = this.pairs.find(pair => pair.isParticipantExist(participantId));
     if (!targetPair) {
       throw new Error('ペアが見つかりませんでした');
@@ -116,6 +117,7 @@ export class Team {
     if (!moveParticipantId) {
       throw new Error('移動する参加者が見つかりませんでした');
     }
+    console.log(`ペア${pair.name}の参加者${moveParticipantId}をペア${targetPair.name}に移動します`);
     targetPair.addParticipant(moveParticipantId);
 
     // 元のペアを削除

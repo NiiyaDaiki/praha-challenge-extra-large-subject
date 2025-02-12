@@ -43,15 +43,16 @@ export class ParticipantsController {
   async updateParticipant(
     @Param('id') id: string,
     @Body() updateParticipantDto: UpdateParticipantRequest): Promise<void> {
+    console.log(updateParticipantDto)
     const prisma = new PrismaClient()
     const participantRepo = new ParticipantRepository(prisma)
-    const usecase = new UpdateParticipantUseCase(participantRepo)
+    const teamRepo = new TeamRepository(prisma)
+    const usecase = new UpdateParticipantUseCase(participantRepo, teamRepo)
     await usecase.do({
       id,
       name: updateParticipantDto.name,
       email: updateParticipantDto.email,
-      status: updateParticipantDto.status,
-
+      status: updateParticipantDto.status
     })
   }
 
