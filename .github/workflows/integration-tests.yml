@@ -38,8 +38,11 @@ jobs:
         with:
           node-version: "18"
       - name: Install dependencies
+        working-directory: backend
         run: npm ci
       - name: Seed database
+        working-directory: backend
         run: npx prisma db seed
       - name: Run integration tests
+        working-directory: backend
         run: npm run test:e2e
