@@ -26,14 +26,13 @@ export class DeleteParticipantUseCase {
 
     await this.teamRepo.save(team)
 
+    if (!await this.participantRepo.delete(id)) {
+      throw new Error('参加者が見つかりませんでした')
+    }
     // メンバー数が2名以下の場合のメール送信処理
     if (team.getTotalParticipantCount() <= 2) {
       // メール送信処理
       console.log(`メール送信処理 チーム名:${team.getAllProperties().name}のメンバー数が2名以下になりました`)
-    }
-
-    if (!await this.participantRepo.delete(id)) {
-      throw new Error('参加者が見つかりませんでした')
     }
   }
 }

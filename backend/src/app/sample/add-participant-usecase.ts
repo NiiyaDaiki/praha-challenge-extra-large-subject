@@ -21,7 +21,9 @@ export class AddParticipantUseCase {
 
     // メールアドレスの重複チェック
     const spec = new UniqueEmailSpecification(this.participantRepo)
-    if (!await spec.isSatisfiedBy(params.email)) {
+    const isSatisfy = await spec.isSatisfiedBy(params.email)
+    console.log(isSatisfy)
+    if (!isSatisfy) {
       throw new Error("このメールアドレスは既に登録されています");
     }
 
@@ -40,13 +42,14 @@ export class AddParticipantUseCase {
     // 最も参加人数が少ないチームを取得する(今回はチームが存在しない場合は考慮する必要はない)
     const service = new TeamService(this.teamRepo)
     const minTeams = await service.findTeamWithLeastParticipants()
-
+    if (minTeams.length === 0) {
+      throw new Error('チームが見つかりませんでした')
+    }
     // 最小参加人数のチームからランダムに選択する
     const targetTeam = minTeams[Math.floor(Math.random() * minTeams.length)]
     if (!targetTeam) {
-      throw new Error('チームが見つかりませんでした')
+      throw new Error('参加対象になるチームが見つかりませんでした')
     }
-
     // 参加者をチームに追加する
     targetTeam.addParticipant(participant.id)
 
