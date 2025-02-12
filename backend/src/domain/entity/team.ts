@@ -9,9 +9,10 @@ export class Team {
   constructor(props: { id: string, name: string, pairs: Pair[] }) {
     const { id, name, pairs } = props
     this.isValidName(name)
+    this.isUniquePairName(pairs)
 
-    this.id = id
     this.name = name
+    this.id = id
     this.pairs = pairs
   }
 
@@ -87,6 +88,27 @@ export class Team {
       }
     }
     return targetPairs
+  }
+
+  public reassignPairParticipants(pairs: Pair[]): void {
+    const oldParticipantIds = this.pairs.flatMap(p => p.getParticipantIds())
+    const newParticipantIds = pairs.flatMap(p => p.getParticipantIds())
+
+    // 参加者の追加、削除、重複がある場合はエラー
+    const diff = oldParticipantIds.filter(id => !newParticipantIds.includes(id))
+    if (oldParticipantIds.length !== newParticipantIds.length || diff.length !== 0) {
+      throw new Error('ペアの参加者が変更されています');
+    }
+    this.isUniquePairName(pairs)
+  }
+
+  private isUniquePairName(pairs: Pair[]): void {
+    // ペア名の重複チェック
+    const pairNames = pairs.map(p => p.name);
+    const uniquePairNames = new Set(pairNames);
+    if (pairNames.length !== uniquePairNames.size) {
+      throw new Error('ペア名が重複しています');
+    }
   }
 
 
