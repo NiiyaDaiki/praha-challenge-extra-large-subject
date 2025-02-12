@@ -1,0 +1,54 @@
+name: Integration Tests
+
+on:
+  pull_request:
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      prisma-db:
+        image: postgres:12
+        ports:
+          - 5403:5432
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: prisma2020
+          POSTGRES_DB: prisma
+          TZ: Asia/Tokyo
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # サービスコンテナのホスト側のポートを利用するので、ホストは localhost
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5403
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: prisma2020
+      POSTGRES_DB: prisma
+      DATABASE_URL: postgres://root:prisma2020@localhost:5403/prisma
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+      - name: Apply Prisma migrations
+        working-directory: backend
+        run: npx prisma migrate deploy
+      - name: Seed database
+        working-directory: backend
+        run: npx prisma db seed
+      - name: Run integration tests
+        working-directory: backend
+        run: npm run test:e2e
