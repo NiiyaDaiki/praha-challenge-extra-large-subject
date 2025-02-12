@@ -2,7 +2,7 @@ import { ParticipantTask } from "../../domain/entity/participant-task"
 import { Task } from "../../domain/entity/task/task"
 import { createRandomIdString } from "../../util/random"
 
-const MembershipStatus = {
+export const MembershipStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
   LEFT: 'LEFT'
@@ -26,7 +26,7 @@ export class Participant {
   }) {
     const { id, name, email, status = 'ACTIVE', tasks } = props
     if (!this.isValidEmail(email)) {
-      throw new Error('Invalid email address provided.')
+      throw new Error('無効なメールアドレスが指定されました')
     }
     this.id = id
     this.name = name
@@ -52,16 +52,6 @@ export class Participant {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     return regex.test(email)
   }
-
-  // public addParticipantTasks(id: string, tasks: Task[]) {
-  //   // TODO: 重複しているタスクを除外する
-
-  //   return tasks.map(task => ParticipantTask.create({
-  //     id: createRandomIdString(),
-  //     participantId: id,
-  //     taskId: task.id,
-  //   }));
-  // }
 
   public isActive() {
     return this.status === 'ACTIVE'
