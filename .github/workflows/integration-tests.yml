@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         working-directory: backend
         run: npm ci
+      - name: Apply Prisma migrations
+        working-directory: backend
+        run: npx prisma migrate deploy
       - name: Seed database
         working-directory: backend
         run: npx prisma db seed
