@@ -3,6 +3,7 @@ import { ParticipantsController } from './controller/participants/participants.c
 import { PairsController } from './controller/pairs/pairs.controller'
 import { TeamsController } from './controller/teams/teams.controller'
 import { ParticipantTasksController } from './controller/participant-task/participant-task.controller'
+import { TasksController } from './controller/tasks/tasks.controller'
 
 // memo: DIコンテナとしては使わないため、controllerの追加だけしてください
 @Module({
@@ -11,7 +12,8 @@ import { ParticipantTasksController } from './controller/participant-task/partic
     ParticipantsController,
     PairsController,
     TeamsController,
-    ParticipantTasksController
+    ParticipantTasksController,
+    TasksController
   ],
   providers: [],
 })
