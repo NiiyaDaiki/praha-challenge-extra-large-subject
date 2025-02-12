@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { PairDTO } from '../../../app/sample/query-service-interface/pairs-qs'
-import { ParticipantDTO } from '../../../app/sample/query-service-interface/participants-qs'
+import { PairDTO } from '../../../app/query-service-interface/pairs-qs'
+import { ParticipantDTO } from '../../../app/query-service-interface/participants-qs'
 
 export class GetPairsResponse {
   @ApiProperty({ type: () => [Pair] })

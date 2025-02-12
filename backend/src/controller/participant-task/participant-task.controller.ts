@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Patch } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { UpdateParticipantTaskRequest } from '../participant-task/request/update-participant-task-request';
-import { UpdateParticipantTaskUseCase } from '../../app/sample/update-participant-task-usecase';
+import { UpdateParticipantTaskUseCase } from '../../app/update-participant-task-usecase';
 import { ParticipantTaskRepository } from '../../infra/db/repository/participant-task-repository';
 
 @Controller({

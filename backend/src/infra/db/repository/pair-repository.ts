@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { IPairRepository } from '../../../app/sample/repository-interface/pair-repository-interface'
+import { IPairRepository } from '../../../app/repository-interface/pair-repository-interface'
 import { Pair } from '../../../domain/entity/pair'
 
 export class PairRepository implements IPairRepository {

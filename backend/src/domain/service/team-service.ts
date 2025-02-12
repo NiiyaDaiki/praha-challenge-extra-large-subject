@@ -1,5 +1,5 @@
 import { Team } from '../entity/team';
-import { ITeamRepository } from '../../app/sample/repository-interface/team-repository-interface';
+import { ITeamRepository } from '../../app/repository-interface/team-repository-interface';
 
 export class TeamService {
 

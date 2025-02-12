@@ -1,20 +1,20 @@
 import { Body, Controller, Delete, Get, Param, ParseArrayPipe, Post, Query } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
-import { AddParticipantUseCase } from '../../app/sample/add-participant-usecase';
-import { GetParticipantsUseCase } from '../../app/sample/get-participants-usecase';
+import { AddParticipantUseCase } from '../../app/add-participant-usecase';
+import { GetParticipantsUseCase } from '../../app/get-participants-usecase';
 import { AddParticipantRequest } from '../../controller/participants/request/add-participant-request';
 import { GetParticipantsResponse } from '../../controller/participants/response/get-participants-response';
-import { ParticipantsQS } from '../../infra/db/query-service/sample/participants-qs';
+import { ParticipantsQS } from '../../infra/db/query-service/participants-qs';
 import { ParticipantRepository } from '../../infra/db/repository/participant-repository';
 import { UpdateParticipantRequest } from './request/update-participant-request';
-import { UpdateParticipantUseCase } from '../../app/sample/update-participant-usecase';
-import { DeleteParticipantUseCase } from '../../app/sample/delete-participant-usecase';
+import { UpdateParticipantUseCase } from '../../app/update-participant-usecase';
+import { DeleteParticipantUseCase } from '../../app/delete-participant-usecase';
 import { TeamRepository } from '../../infra/db/repository/team-repository';
 import { TaskRepository } from '../../infra/db/repository/task-repository';
 import { SearchParticipantsResponse } from './response/search-participants-response';
-import { SearchParticipantsUseCase } from '../../app/sample/search-participants-usecase';
-import { ParticipantTasksQS } from '../../infra/db/query-service/sample/participant-task-qs';
+import { SearchParticipantsUseCase } from '../../app/search-participants-usecase';
+import { ParticipantTasksQS } from '../../infra/db/query-service/participant-task-qs';
 
 @Controller({
   path: '/participants'

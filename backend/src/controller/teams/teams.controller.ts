@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
-import { GetTeamsUseCase } from '../../app/sample/get-teams-usecase';
+import { GetTeamsUseCase } from '../../app/get-teams-usecase';
 import { GetTeamsResponse } from './response/get-teams-response';
 import { ReassignPairParticipantRequest } from './request/update-team-request';
-import { TeamsQS } from '../../infra/db/query-service/sample/teams-qs';
+import { TeamsQS } from '../../infra/db/query-service/teams-qs';
 import { TeamRepository } from '../../infra/db/repository/team-repository';
-import { ReassignPairParticipantsUseCase } from '../../app/sample/reassign-pair-participants-usecase';
+import { ReassignPairParticipantsUseCase } from '../../app/reassign-pair-participants-usecase';
 import { Pair } from '../../domain/entity/pair';
 
 @Controller({

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { TeamDTO } from '../../../app/sample/query-service-interface/teams-qs'
-import { PairDTO } from '../../../app/sample/query-service-interface/pairs-qs'
+import { TeamDTO } from '../../../app/query-service-interface/teams-qs'
+import { PairDTO } from '../../../app/query-service-interface/pairs-qs'
 
 export class GetTeamsResponse {
   @ApiProperty({ type: () => [Team] })

@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
-import { GetPairsUseCase } from '../../app/sample/get-pairs-usecase';
+import { GetPairsUseCase } from '../../app/get-pairs-usecase';
 import { GetPairsResponse } from './response/get-pairs-response';
-import { PairsQS } from '../../infra/db/query-service/sample/pairs-qs';
-import { MovePairUseCase } from '../../app/sample/move-pair-usecase';
+import { PairsQS } from '../../infra/db/query-service/pairs-qs';
+import { MovePairUseCase } from '../../app/move-pair-usecase';
 import { TeamRepository } from '../../infra/db/repository/team-repository';
 import { MovePairRequest } from './request/move-pair-request';
 
