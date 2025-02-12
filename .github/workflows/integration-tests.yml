@@ -24,7 +24,6 @@ jobs:
           --health-retries 5
 
     env:
-      # サービスコンテナの場合、ホスト名はサービス名(prisma-test-db)
       POSTGRES_HOST: prisma-test-db
       POSTGRES_PORT: 5432
       POSTGRES_USER: root
@@ -44,6 +43,13 @@ jobs:
       - name: Seed database
         working-directory: backend
         run: npx prisma db seed
+      - name: Wait for database
+        working-directory: backend
+        run: |
+          until nc -z prisma-test-db 5432; do
+            echo "Waiting for database to be ready...";
+            sleep 2;
+          done
       - name: Run integration tests
         working-directory: backend
         run: npm run test:e2e
