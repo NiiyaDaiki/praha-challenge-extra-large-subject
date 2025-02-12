@@ -13,7 +13,8 @@ import { ParticipantTasksController } from './controller/participant-task/partic
     ParticipantsController,
     PairsController,
     TeamsController,
-    ParticipantTasksController],
+    ParticipantTasksController
+  ],
   providers: [],
 })
 export class AppModule { }
