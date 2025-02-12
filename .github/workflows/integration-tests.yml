@@ -24,12 +24,13 @@ jobs:
           --health-retries 5
 
     env:
-      # サービスコンテナの場合、ホスト名はサービス名(prisma-test-db)になります
+      # サービスコンテナの場合、ホスト名はサービス名(prisma-test-db)
       POSTGRES_HOST: prisma-test-db
       POSTGRES_PORT: 5432
       POSTGRES_USER: root
       POSTGRES_PASSWORD: prisma2020
       POSTGRES_DB: prisma
+      DATABASE_URL: postgres://root:prisma2020@prisma-test-db:5432/prisma
 
     steps:
       - uses: actions/checkout@v3
