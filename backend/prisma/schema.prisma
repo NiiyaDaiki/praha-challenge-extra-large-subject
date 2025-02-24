@@ -5,6 +5,8 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
+  // dockerで動かす設定
+  binaryTargets = ["native", "darwin-arm64", "linux-musl-arm64-openssl-1.1.x"]
 }
 
 model Participant {

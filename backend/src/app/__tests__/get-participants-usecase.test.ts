@@ -1,18 +1,17 @@
 import { GetParticipantsUseCase } from '../get-participants-usecase'
 import { IParticipantsQS } from '../query-service-interface/participants-qs'
-import { mocked } from 'ts-jest/utils'
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
+import { mocked, MockedObject } from 'jest-mock'
 import { MembershipStatus } from '../../domain/entity/participant'
 
 jest.mock('../query-service-interface/participants-qs')
 
 describe('GetParticipantsUseCase', () => {
-  let mockParticipantsQS: MockedObjectDeep<IParticipantsQS>
+  let mockParticipantsQS: MockedObject<IParticipantsQS>
 
   beforeAll(() => {
     mockParticipantsQS = mocked({
       getAll: jest.fn(),
-    } as IParticipantsQS, true)
+    } as IParticipantsQS)
   })
 
   it('[正常系]: getAll が正常にデータを返す', async () => {
