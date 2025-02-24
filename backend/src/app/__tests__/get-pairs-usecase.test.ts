@@ -1,17 +1,16 @@
 import { GetPairsUseCase } from '../get-pairs-usecase'
 import { IPairsQS, PairDTO } from '../query-service-interface/pairs-qs'
-import { mocked } from 'ts-jest/utils'
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
+import { mocked, MockedObject } from 'jest-mock'
 
 jest.mock('../query-service-interface/pairs-qs')
 
 describe('GetPairsUseCase', () => {
-  let mockPairsQS: MockedObjectDeep<IPairsQS>
+  let mockPairsQS: MockedObject<IPairsQS>
 
   beforeAll(() => {
     mockPairsQS = mocked({
       getAll: jest.fn(),
-    } as IPairsQS, true)
+    } as IPairsQS, { shallow: false })
   })
 
   it('[正常系]: getAll が正常にデータを返す', async () => {

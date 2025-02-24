@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { PrismaClient } from '@prisma/client';
 import { GetTasksUseCase } from '../../app/get-tasks-usecase';
 import { GetTasksResponse } from '../../controller/tasks/response/get-tasks-response';
 import { TaskQS } from '../../infra/db/query-service/tasks-qs';
+import { FirebaseAuthGuard } from '../../guards/firebase-auth.guard';
 
 @Controller({
   path: '/tasks'
@@ -11,6 +12,7 @@ import { TaskQS } from '../../infra/db/query-service/tasks-qs';
 export class TasksController {
 
   @Get()
+  @UseGuards(FirebaseAuthGuard)
   @ApiResponse({ status: 200, type: GetTasksResponse })
   async getTasks(): Promise<GetTasksResponse> {
     const prisma = new PrismaClient()

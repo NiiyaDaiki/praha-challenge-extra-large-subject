@@ -8,6 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   app.useGlobalPipes(new ValidationPipe())
 
+  // ここでCORSを有効化し、許可したいオリジンを指定
+  app.enableCors({
+    origin: ['http://localhost:3000']
+  });
+
   if (process.env.STAGE !== 'production') {
     const config = new DocumentBuilder()
       .setTitle('backend sample')

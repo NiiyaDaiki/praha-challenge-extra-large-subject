@@ -1,17 +1,16 @@
 import { GetTeamsUseCase } from '../get-teams-usecase'
 import { ITeamsQS, TeamDTO } from '../query-service-interface/teams-qs'
-import { mocked } from 'ts-jest/utils'
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing'
+import { mocked, MockedObject } from 'jest-mock'
 
 jest.mock('../query-service-interface/teams-qs')
 
 describe('GetTeamsUseCase', () => {
-  let mockTeamsQS: MockedObjectDeep<ITeamsQS>
+  let mockTeamsQS: MockedObject<ITeamsQS>
 
   beforeAll(() => {
     mockTeamsQS = mocked({
       getAll: jest.fn(),
-    } as ITeamsQS, true)
+    } as ITeamsQS)
   })
 
   it('[正常系]: getAll が正常にデータを返す', async () => {
